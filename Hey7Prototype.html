@@ -2982,7 +2982,23 @@ Takes 30 seconds. I've coordinated luggage handling.</div>
             <button class="notes-panel-close" onclick="closeNotesPanel()">×</button>
         </div>
         <div class="notes-list" id="notesList">
-            <div class="notes-empty" id="notesEmpty">No notes yet. Add notes to document this incident.</div>
+            <!-- Auto-generated Case Summary -->
+            <div style="background:#0d1117;border:1px solid #21262d;border-radius:10px;padding:12px;margin-bottom:12px;">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+                    <span style="font-size:14px;">📋</span>
+                    <span style="font-size:12px;font-weight:600;color:#60a5fa;">Auto-Generated Summary</span>
+                    <span style="font-size:9px;color:#737373;margin-left:auto;">Live</span>
+                </div>
+                <ul style="margin:0;padding-left:16px;font-size:11px;line-height:1.8;color:#a3a3a3;">
+                    <li><span style="color:#e5e5e5;">9:45 AM</span> — Guest reported diamond bracelet missing from safe</li>
+                    <li><span style="color:#e5e5e5;">9:45 AM</span> — Sentiment detected: <span style="color:#ef4444;">Highly Distressed</span></li>
+                    <li><span style="color:#e5e5e5;">9:45 AM</span> — Marketing campaigns auto-paused</li>
+                    <li><span style="color:#e5e5e5;">9:45 AM</span> — Security dispatched to room 4127</li>
+                    <li><span style="color:#e5e5e5;">9:46 AM</span> — Seven sent initial response</li>
+                </ul>
+            </div>
+            <div style="font-size:10px;color:#525252;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;padding-left:2px;">Your Notes</div>
+            <div class="notes-empty" id="notesEmpty">No manual notes yet. Add notes below.</div>
         </div>
         <div class="notes-input-area">
             <div class="notes-input-row">
@@ -3042,29 +3058,51 @@ Takes 30 seconds. I've coordinated luggage handling.</div>
                 <div style="display:flex;gap:16px;font-size:12px;">
                     <div><span style="color:#737373;">Room:</span> <span style="color:#e5e5e5;">4127</span></div>
                     <div><span style="color:#737373;">Tier:</span> <span style="color:#d4af37;">X-Card</span></div>
-                    <div><span style="color:#737373;">Duration:</span> <span style="color:#e5e5e5;">8m 32s</span></div>
+                    <div><span style="color:#737373;">Case Duration:</span> <span style="color:#e5e5e5;" data-field="duration">--</span></div>
+                </div>
+            </div>
+
+            <!-- Human Takeover Section -->
+            <div style="background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.3);border-radius:10px;padding:14px;margin-bottom:16px;">
+                <div style="font-size:11px;color:#a78bfa;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;font-weight:600;">Human Intervention</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:12px;">
+                    <div>
+                        <div style="color:#737373;margin-bottom:2px;">Taken Over By</div>
+                        <div style="color:#e5e5e5;font-weight:600;">Marcus Rivera</div>
+                    </div>
+                    <div>
+                        <div style="color:#737373;margin-bottom:2px;">Role</div>
+                        <div style="color:#e5e5e5;">VIP Host</div>
+                    </div>
+                    <div>
+                        <div style="color:#737373;margin-bottom:2px;">Takeover Duration</div>
+                        <div style="color:#e5e5e5;" data-field="duration">--</div>
+                    </div>
+                    <div>
+                        <div style="color:#737373;margin-bottom:2px;">Messages Sent</div>
+                        <div style="color:#e5e5e5;" data-field="messages">--</div>
+                    </div>
                 </div>
             </div>
 
             <div style="margin-bottom:16px;">
-                <div style="font-size:11px;color:#737373;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Incident Summary</div>
+                <div style="font-size:11px;color:#737373;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Incident Timeline</div>
                 <ul style="margin:0;padding-left:20px;font-size:13px;line-height:1.8;color:#a3a3a3;">
                     <li>Guest reported <span style="color:#e5e5e5;">diamond bracelet missing</span> from in-room safe</li>
                     <li>Seven automatically <span style="color:#e5e5e5;">paused all marketing</span> to guest</li>
                     <li>Security dispatched to room within <span style="color:#e5e5e5;">2 minutes</span></li>
-                    <li>Host took over conversation to provide <span style="color:#e5e5e5;">personal reassurance</span></li>
+                    <li><span style="color:#a78bfa;">Marcus Rivera</span> took over conversation</li>
                     <li>Bracelet <span style="color:#10b981;">located on bathroom floor</span> behind vanity</li>
+                    <li>Control <span style="color:#10b981;">returned to Seven</span></li>
                     <li>Guest sentiment improved from <span style="color:#ef4444;">Negative</span> to <span style="color:#10b981;">Positive</span></li>
                 </ul>
             </div>
 
             <div style="margin-bottom:16px;">
-                <div style="font-size:11px;color:#737373;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Actions Taken</div>
-                <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                <div style="font-size:11px;color:#737373;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Actions Taken by Host</div>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;" data-field="actions">
                     <span style="background:rgba(59,130,246,0.15);color:#60a5fa;padding:6px 10px;border-radius:6px;font-size:11px;">Marketing Paused</span>
                     <span style="background:rgba(59,130,246,0.15);color:#60a5fa;padding:6px 10px;border-radius:6px;font-size:11px;">Security Dispatched</span>
-                    <span style="background:rgba(124,58,237,0.15);color:#a78bfa;padding:6px 10px;border-radius:6px;font-size:11px;">Host Takeover</span>
-                    <span style="background:rgba(16,185,129,0.15);color:#10b981;padding:6px 10px;border-radius:6px;font-size:11px;">Item Recovered</span>
                 </div>
             </div>
 
@@ -3085,9 +3123,11 @@ Takes 30 seconds. I've coordinated luggage handling.</div>
     <script>
         let inTakeover = false;
         let takeoverStart = null;
+        let takeoverEndTime = null;
         let messageCount = 0;
         let timerInterval = null;
         let notesData = [];
+        let actionsTaken = [];
         
         // Profile Panel
         function showProfilePanel() {
@@ -3126,22 +3166,56 @@ Takes 30 seconds. I've coordinated luggage handling.</div>
 
         function triggerHostAction(action) {
             const actions = {
-                'tea': { icon: '🍵', name: 'Complimentary Tea', msg: 'Chamomile tea ordered to room 4127' },
-                'manager': { icon: '👔', name: 'Duty Manager', msg: 'Duty Manager notified - ETA 3 mins' },
-                'credit': { icon: '💳', name: 'Spa Credit', msg: '$200 spa credit applied to account' },
-                'dining': { icon: '🍽️', name: 'Comp Dinner', msg: 'Next dinner comped (up to $300)' },
-                'upgrade': { icon: '⬆️', name: 'Room Upgrade', msg: 'Checking suite availability...' },
-                'followup': { icon: '📞', name: 'Follow-up Call', msg: 'Follow-up call scheduled for 2 hours' }
+                'tea': { icon: '🍵', name: 'Complimentary Tea', msg: 'Chamomile tea ordered to room 4127', dept: 'Room Service' },
+                'manager': { icon: '👔', name: 'Duty Manager', msg: 'Duty Manager notified - ETA 3 mins', dept: 'Management' },
+                'credit': { icon: '💳', name: 'Spa Credit ($200)', msg: '$200 spa credit applied to account', dept: 'Guest Services' },
+                'dining': { icon: '🍽️', name: 'Comp Dinner', msg: 'Next dinner comped (up to $300)', dept: 'F&B' },
+                'upgrade': { icon: '⬆️', name: 'Room Upgrade', msg: 'Checking suite availability...', dept: 'Front Desk' },
+                'followup': { icon: '📞', name: 'Follow-up Call', msg: 'Follow-up call scheduled for 2 hours', dept: 'Host' }
             };
 
             const actionData = actions[action];
+            const now = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+
+            // Track action taken
+            actionsTaken.push({ ...actionData, time: now });
 
             // Close dropdown
             document.getElementById('hostActionsToggle').classList.remove('expanded');
             document.getElementById('hostActionsList').classList.remove('expanded');
 
+            // Add action to chat as a system message
+            const msgs = document.getElementById('messages');
+            const typing = document.getElementById('typing');
+            const div = document.createElement('div');
+            div.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.3);border-radius:10px;margin:8px 0;';
+            div.innerHTML = `
+                <span style="font-size:18px;">${actionData.icon}</span>
+                <div style="flex:1;">
+                    <div style="font-size:12px;font-weight:600;color:#a78bfa;">${actionData.name}</div>
+                    <div style="font-size:11px;color:#737373;">${actionData.dept} • ${now}</div>
+                </div>
+                <span style="font-size:10px;color:#10b981;font-weight:600;">✓ Sent</span>
+            `;
+            msgs.insertBefore(div, typing);
+            scrollToBottom();
+
+            // Update auto-generated notes
+            updateAutoNotes(actionData.icon + ' ' + actionData.name + ' triggered');
+
             // Show toast notification
             showActionToast(actionData.icon + ' ' + actionData.msg);
+        }
+
+        function updateAutoNotes(note) {
+            const notesList = document.getElementById('notesList');
+            const autoSummary = notesList.querySelector('ul');
+            if (autoSummary) {
+                const now = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+                const li = document.createElement('li');
+                li.innerHTML = `<span style="color:#e5e5e5;">${now}</span> — ${note}`;
+                autoSummary.appendChild(li);
+            }
         }
 
         function showActionToast(message) {
@@ -3437,20 +3511,35 @@ Takes 30 seconds. I've coordinated luggage handling.</div>
             inTakeover = true;
             takeoverStart = Date.now();
             messageCount = 0;
-            
+
             document.getElementById('header').classList.add('takeover-mode');
             document.getElementById('alertPill').classList.add('hidden');
             document.getElementById('takeoverPill').classList.add('active');
             document.getElementById('responseSection').style.display = 'none';
             document.getElementById('returnBar').classList.add('active');
             document.getElementById('composeSection').classList.add('active');
-            
+
             // Update takeover button to show active state
             const takeoverBtn = document.getElementById('takeoverToolbarBtn');
             takeoverBtn.classList.add('active');
             takeoverBtn.innerHTML = '<span>🎙️</span><span>In Control</span>';
             takeoverBtn.onclick = null; // Disable click during takeover
-            
+
+            // Add takeover indicator to chat
+            const msgs = document.getElementById('messages');
+            const typing = document.getElementById('typing');
+            const div = document.createElement('div');
+            div.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.4);border-radius:10px;margin:12px 0;';
+            div.innerHTML = `
+                <span style="font-size:14px;">🎙️</span>
+                <span style="font-size:12px;font-weight:600;color:#a78bfa;">Marcus Rivera took over conversation</span>
+                <span style="font-size:10px;color:#737373;">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+            `;
+            msgs.insertBefore(div, typing);
+
+            // Update auto notes
+            updateAutoNotes('<span style="color:#a78bfa;">Host takeover</span> — Marcus Rivera took control');
+
             startTimer();
             scrollToBottom();
             document.getElementById('composeInput').focus();
@@ -3472,7 +3561,11 @@ Takes 30 seconds. I've coordinated luggage handling.</div>
             closeModal('returnModal');
             clearInterval(timerInterval);
             inTakeover = false;
-            
+            takeoverEndTime = Date.now();
+
+            const takeoverDuration = Math.floor((takeoverEndTime - takeoverStart) / 1000);
+            const durationStr = `${Math.floor(takeoverDuration/60)}m ${takeoverDuration%60}s`;
+
             document.getElementById('header').classList.remove('takeover-mode');
             document.getElementById('alertPill').classList.remove('hidden');
             document.getElementById('takeoverPill').classList.remove('active');
@@ -3493,7 +3586,54 @@ Takes 30 seconds. I've coordinated luggage handling.</div>
             takeoverBtn.innerHTML = '<span>🎙️</span><span>Take Over</span>';
             takeoverBtn.onclick = showTakeoverModal;
 
+            // Add return indicator to chat
+            const msgs = document.getElementById('messages');
+            const typing = document.getElementById('typing');
+            const div = document.createElement('div');
+            div.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.4);border-radius:10px;margin:12px 0;';
+            div.innerHTML = `
+                <span style="font-size:14px;">✓</span>
+                <span style="font-size:12px;font-weight:600;color:#10b981;">Control returned to Seven</span>
+                <span style="font-size:10px;color:#737373;">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})} • ${durationStr} takeover</span>
+            `;
+            msgs.insertBefore(div, typing);
+
+            // Update auto notes
+            updateAutoNotes('<span style="color:#10b981;">Control returned</span> — Back to Seven after ' + durationStr);
+
+            // Update case summary with dynamic data
+            updateCaseSummary(durationStr);
+
             document.getElementById('guestBar').classList.add('resolved');
+        }
+
+        function updateCaseSummary(duration) {
+            const summaryModal = document.querySelector('#caseSummaryModal .modal');
+            if (summaryModal) {
+                // Update all duration fields
+                summaryModal.querySelectorAll('[data-field="duration"]').forEach(el => {
+                    el.textContent = duration;
+                });
+
+                // Update messages count
+                const messagesEl = summaryModal.querySelector('[data-field="messages"]');
+                if (messagesEl) messagesEl.textContent = messageCount;
+
+                // Update actions taken section with host actions
+                const actionsSection = summaryModal.querySelector('[data-field="actions"]');
+                if (actionsSection) {
+                    let actionsHtml = `
+                        <span style="background:rgba(59,130,246,0.15);color:#60a5fa;padding:6px 10px;border-radius:6px;font-size:11px;">Marketing Paused</span>
+                        <span style="background:rgba(59,130,246,0.15);color:#60a5fa;padding:6px 10px;border-radius:6px;font-size:11px;">Security Dispatched</span>
+                    `;
+                    if (actionsTaken.length > 0) {
+                        actionsHtml += actionsTaken.map(a =>
+                            `<span style="background:rgba(124,58,237,0.15);color:#a78bfa;padding:6px 10px;border-radius:6px;font-size:11px;">${a.icon} ${a.name}</span>`
+                        ).join('');
+                    }
+                    actionsSection.innerHTML = actionsHtml;
+                }
+            }
         }
         
         function addMessage(type, text) {
