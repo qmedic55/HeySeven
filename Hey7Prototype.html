@@ -782,6 +782,124 @@
             cursor: pointer;
             flex-shrink: 0;
         }
+
+        /* Host Actions Dropdown */
+        .host-actions {
+            margin-bottom: 10px;
+        }
+
+        .host-actions-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            background: #1a1a1c;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 10px 12px;
+            color: #e5e5e5;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .host-actions-toggle:hover {
+            background: #222;
+            border-color: #444;
+        }
+
+        .host-actions-toggle .label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .host-actions-toggle .arrow {
+            font-size: 10px;
+            color: #737373;
+            transition: transform 0.2s;
+        }
+
+        .host-actions-toggle.expanded .arrow {
+            transform: rotate(180deg);
+        }
+
+        .host-actions-list {
+            display: none;
+            background: #141416;
+            border: 1px solid #333;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            overflow: hidden;
+            margin-top: -1px;
+        }
+
+        .host-actions-list.expanded {
+            display: block;
+        }
+
+        .host-action-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            border-bottom: 1px solid #262626;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .host-action-item:last-child {
+            border-bottom: none;
+        }
+
+        .host-action-item:hover {
+            background: #1a1a1c;
+        }
+
+        .host-action-item .icon {
+            font-size: 16px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .host-action-item .details {
+            flex: 1;
+        }
+
+        .host-action-item .action-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: #e5e5e5;
+            margin-bottom: 2px;
+        }
+
+        .host-action-item .action-desc {
+            font-size: 11px;
+            color: #737373;
+        }
+
+        .host-action-item .action-tag {
+            font-size: 9px;
+            font-weight: 600;
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+
+        .host-action-item .action-tag.instant {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+        }
+
+        .host-action-item .action-tag.request {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+        }
+
+        .host-action-item .action-tag.vip {
+            background: rgba(212, 175, 55, 0.15);
+            color: #d4af37;
+        }
         
         .compose-row {
             display: flex;
@@ -2478,6 +2596,65 @@ Takes 30 seconds. I've coordinated luggage handling.</div>
                     <span class="text" id="advisorText">Security is 2 min out. Reassure her and ask not to touch anything.</span>
                     <button class="use-btn" onclick="useSuggestion()">Use</button>
                 </div>
+
+                <!-- Host Actions Dropdown -->
+                <div class="host-actions">
+                    <button class="host-actions-toggle" id="hostActionsToggle" onclick="toggleHostActions()">
+                        <span class="label"><span>⚡</span> Quick Actions for This Situation</span>
+                        <span class="arrow">▼</span>
+                    </button>
+                    <div class="host-actions-list" id="hostActionsList">
+                        <div class="host-action-item" onclick="triggerHostAction('tea')">
+                            <span class="icon">🍵</span>
+                            <div class="details">
+                                <div class="action-name">Send Complimentary Tea</div>
+                                <div class="action-desc">Calming gesture - chamomile tea to room</div>
+                            </div>
+                            <span class="action-tag instant">Instant</span>
+                        </div>
+                        <div class="host-action-item" onclick="triggerHostAction('manager')">
+                            <span class="icon">👔</span>
+                            <div class="details">
+                                <div class="action-name">Request Duty Manager</div>
+                                <div class="action-desc">Escalate to on-duty manager for visit</div>
+                            </div>
+                            <span class="action-tag request">Request</span>
+                        </div>
+                        <div class="host-action-item" onclick="triggerHostAction('credit')">
+                            <span class="icon">💳</span>
+                            <div class="details">
+                                <div class="action-name">Apply Spa Credit ($200)</div>
+                                <div class="action-desc">Goodwill gesture to guest account</div>
+                            </div>
+                            <span class="action-tag vip">VIP Perk</span>
+                        </div>
+                        <div class="host-action-item" onclick="triggerHostAction('dining')">
+                            <span class="icon">🍽️</span>
+                            <div class="details">
+                                <div class="action-name">Comp Next Dinner</div>
+                                <div class="action-desc">Cover next restaurant visit (up to $300)</div>
+                            </div>
+                            <span class="action-tag vip">VIP Perk</span>
+                        </div>
+                        <div class="host-action-item" onclick="triggerHostAction('upgrade')">
+                            <span class="icon">⬆️</span>
+                            <div class="details">
+                                <div class="action-name">Offer Room Upgrade</div>
+                                <div class="action-desc">Check availability for suite upgrade</div>
+                            </div>
+                            <span class="action-tag request">Request</span>
+                        </div>
+                        <div class="host-action-item" onclick="triggerHostAction('followup')">
+                            <span class="icon">📞</span>
+                            <div class="details">
+                                <div class="action-name">Schedule Follow-up Call</div>
+                                <div class="action-desc">Personal check-in call in 2 hours</div>
+                            </div>
+                            <span class="action-tag instant">Instant</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="compose-row">
                     <textarea class="compose-input" id="composeInput" placeholder="Type as Seven..." rows="1"></textarea>
                     <button class="send-btn" id="sendBtn" disabled onclick="sendMessage()">➤</button>
@@ -2839,6 +3016,72 @@ Takes 30 seconds. I've coordinated luggage handling.</div>
         </div>
     </div>
 
+    <!-- CASE SUMMARY MODAL -->
+    <div class="modal-overlay" id="caseSummaryModal">
+        <div class="modal" style="border-top: 2px solid #3b82f6; max-height: 90vh; overflow-y: auto;">
+            <div class="modal-handle"></div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+                <div style="width:40px;height:40px;background:linear-gradient(135deg,#3b82f6,#2563eb);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">📋</div>
+                <div>
+                    <div class="modal-title" style="margin-bottom:2px;">Case Summary</div>
+                    <div style="font-size:12px;color:#737373;">Auto-generated by Seven</div>
+                </div>
+            </div>
+
+            <div style="background:#1a1a1c;border-radius:10px;padding:14px;margin-bottom:16px;">
+                <div style="display:flex;justify-content:space-between;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #262626;">
+                    <div>
+                        <div style="font-size:10px;color:#737373;text-transform:uppercase;margin-bottom:4px;">Guest</div>
+                        <div style="font-size:14px;font-weight:600;">Vanessa Liu</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-size:10px;color:#737373;text-transform:uppercase;margin-bottom:4px;">Status</div>
+                        <div style="font-size:14px;font-weight:600;color:#10b981;">Resolved</div>
+                    </div>
+                </div>
+                <div style="display:flex;gap:16px;font-size:12px;">
+                    <div><span style="color:#737373;">Room:</span> <span style="color:#e5e5e5;">4127</span></div>
+                    <div><span style="color:#737373;">Tier:</span> <span style="color:#d4af37;">X-Card</span></div>
+                    <div><span style="color:#737373;">Duration:</span> <span style="color:#e5e5e5;">8m 32s</span></div>
+                </div>
+            </div>
+
+            <div style="margin-bottom:16px;">
+                <div style="font-size:11px;color:#737373;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Incident Summary</div>
+                <ul style="margin:0;padding-left:20px;font-size:13px;line-height:1.8;color:#a3a3a3;">
+                    <li>Guest reported <span style="color:#e5e5e5;">diamond bracelet missing</span> from in-room safe</li>
+                    <li>Seven automatically <span style="color:#e5e5e5;">paused all marketing</span> to guest</li>
+                    <li>Security dispatched to room within <span style="color:#e5e5e5;">2 minutes</span></li>
+                    <li>Host took over conversation to provide <span style="color:#e5e5e5;">personal reassurance</span></li>
+                    <li>Bracelet <span style="color:#10b981;">located on bathroom floor</span> behind vanity</li>
+                    <li>Guest sentiment improved from <span style="color:#ef4444;">Negative</span> to <span style="color:#10b981;">Positive</span></li>
+                </ul>
+            </div>
+
+            <div style="margin-bottom:16px;">
+                <div style="font-size:11px;color:#737373;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Actions Taken</div>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                    <span style="background:rgba(59,130,246,0.15);color:#60a5fa;padding:6px 10px;border-radius:6px;font-size:11px;">Marketing Paused</span>
+                    <span style="background:rgba(59,130,246,0.15);color:#60a5fa;padding:6px 10px;border-radius:6px;font-size:11px;">Security Dispatched</span>
+                    <span style="background:rgba(124,58,237,0.15);color:#a78bfa;padding:6px 10px;border-radius:6px;font-size:11px;">Host Takeover</span>
+                    <span style="background:rgba(16,185,129,0.15);color:#10b981;padding:6px 10px;border-radius:6px;font-size:11px;">Item Recovered</span>
+                </div>
+            </div>
+
+            <div style="margin-bottom:20px;">
+                <div style="font-size:11px;color:#737373;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Recommended Follow-up</div>
+                <div style="background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);border-radius:8px;padding:12px;font-size:12px;color:#d4af37;">
+                    Consider complimentary gesture (spa credit or dining) to reinforce recovery. Guest LTV: $420K.
+                </div>
+            </div>
+
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" onclick="closeCaseSummary()">Close</button>
+                <button class="modal-btn" style="background:#3b82f6;color:white;" onclick="closeCaseSummary()">Export to CRM</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let inTakeover = false;
         let takeoverStart = null;
@@ -2862,6 +3105,60 @@ Takes 30 seconds. I've coordinated luggage handling.</div>
 
         function closeDashboard() {
             document.getElementById('dashboardPanel').classList.remove('active');
+        }
+
+        // Case Summary
+        function showCaseSummary() {
+            document.getElementById('caseSummaryModal').classList.add('active');
+        }
+
+        function closeCaseSummary() {
+            document.getElementById('caseSummaryModal').classList.remove('active');
+        }
+
+        // Host Actions Dropdown
+        function toggleHostActions() {
+            const toggle = document.getElementById('hostActionsToggle');
+            const list = document.getElementById('hostActionsList');
+            toggle.classList.toggle('expanded');
+            list.classList.toggle('expanded');
+        }
+
+        function triggerHostAction(action) {
+            const actions = {
+                'tea': { icon: '🍵', name: 'Complimentary Tea', msg: 'Chamomile tea ordered to room 4127' },
+                'manager': { icon: '👔', name: 'Duty Manager', msg: 'Duty Manager notified - ETA 3 mins' },
+                'credit': { icon: '💳', name: 'Spa Credit', msg: '$200 spa credit applied to account' },
+                'dining': { icon: '🍽️', name: 'Comp Dinner', msg: 'Next dinner comped (up to $300)' },
+                'upgrade': { icon: '⬆️', name: 'Room Upgrade', msg: 'Checking suite availability...' },
+                'followup': { icon: '📞', name: 'Follow-up Call', msg: 'Follow-up call scheduled for 2 hours' }
+            };
+
+            const actionData = actions[action];
+
+            // Close dropdown
+            document.getElementById('hostActionsToggle').classList.remove('expanded');
+            document.getElementById('hostActionsList').classList.remove('expanded');
+
+            // Show toast notification
+            showActionToast(actionData.icon + ' ' + actionData.msg);
+        }
+
+        function showActionToast(message) {
+            // Remove existing toast if any
+            const existingToast = document.querySelector('.action-toast');
+            if (existingToast) existingToast.remove();
+
+            const toast = document.createElement('div');
+            toast.className = 'action-toast';
+            toast.innerHTML = `<span>✓</span> ${message}`;
+            document.body.appendChild(toast);
+
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
         }
 
         // Notes Panel
@@ -3182,14 +3479,20 @@ Takes 30 seconds. I've coordinated luggage handling.</div>
             document.getElementById('returnBar').classList.remove('active');
             document.getElementById('composeSection').classList.remove('active');
             document.getElementById('responseSection').style.display = 'block';
-            document.getElementById('responseSection').innerHTML = '<div style="text-align:center;padding:20px;color:#10b981;font-size:13px;">✓ Control returned.</div>';
-            
+            document.getElementById('responseSection').innerHTML = `
+                <div style="text-align:center;padding:20px;">
+                    <div style="color:#10b981;font-size:14px;font-weight:600;margin-bottom:12px;">✓ Crisis Resolved</div>
+                    <button onclick="showCaseSummary()" style="background:linear-gradient(135deg,#3b82f6,#2563eb);color:white;border:none;padding:12px 24px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">
+                        📋 View Case Summary
+                    </button>
+                </div>`;
+
             // Reset takeover button
             const takeoverBtn = document.getElementById('takeoverToolbarBtn');
             takeoverBtn.classList.remove('active');
             takeoverBtn.innerHTML = '<span>🎙️</span><span>Take Over</span>';
             takeoverBtn.onclick = showTakeoverModal;
-            
+
             document.getElementById('guestBar').classList.add('resolved');
         }
         
