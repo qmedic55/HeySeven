@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hey Seven • Takeover Mode</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        body {
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            background: #0a0a0b;
+            color: #e5e5e5;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* ============ HEADER ============ */
+        header {
+            background: linear-gradient(180deg, #1a1a2e 0%, #16162a 100%);
+            border-bottom: 1px solid #7c3aed;
+            padding: 10px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            z-index: 100;
+        }
+        
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        
+        .takeover-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(124, 58, 237, 0.2);
+            border: 1px solid #7c3aed;
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+        
+        .takeover-dot {
+            width: 8px;
+            height: 8px;
+            background: #7c3aed;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        
+        .takeover-text { font-size: 12px; color: #a78bfa; font-weight: 600; }
+        
+        .guest-mini {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .guest-mini-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            border: 2px solid #7c3aed;
+        }
+        
+        .guest-mini-name { font-size: 14px; font-weight: 600; }
+        .guest-mini-meta { font-size: 10px; color: #a3a3a3; }
+        
+        .return-btn {
+            background: transparent;
+            border: 1px solid #7c3aed;
+            color: #a78bfa;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        
+        .return-btn:hover {
+            background: rgba(124, 58, 237, 0.1);
+        }
+        
+        /* ============ MAIN LAYOUT ============ */
+        .takeover-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* ============ CHAT AREA ============ */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: #0d0d0f;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .message {
+            max-width: 85%;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .message.guest { align-self: flex-start; }
+        .message.host { align-self: flex-end; }
+        .message.seven-auto { align-self: flex-end; }
+        
+        .message-bubble {
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .message.guest .message-bubble {
+            background: #1a1a1c;
+            border: 1px solid #333;
+            border-radius: 4px 16px 16px 16px;
+        }
+        
+        .message.host .message-bubble {
+            background: #7c3aed;
+            color: white;
+            border-radius: 16px 4px 16px 16px;
+        }
+        
+        .message.seven-auto .message-bubble {
+            background: #1e3a5f;
+            border: 1px solid #3b82f6;
+            border-radius: 16px 4px 16px 16px;
+        }
+        
+        .message-meta {
+            font-size: 10px;
+            color: #737373;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .message.host .message-meta,
+        .message.seven-auto .message-meta {
+            justify-content: flex-end;
+        }
+        
+        .message-sender {
+            font-weight: 600;
+            color: #a78bfa;
+        }
+        
+        .message.seven-auto .message-sender {
+            color: #60a5fa;
+        }
+        
+        .day-divider {
+            text-align: center;
+            padding: 8px 0;
+            font-size: 11px;
+            color: #737373;
+        }
+        
+        .day-divider span {
+            background: #262626;
+            padding: 4px 12px;
+            border-radius: 10px;
+        }
+        
+        /* Typing indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+            background: #1a1a1c;
+            border: 1px solid #333;
+            border-radius: 4px 16px 16px 16px;
+            max-width: 80px;
+            align-self: flex-start;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #737373;
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite;
+        }
+        
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-6px); }
+        }
+        
+        /* ============ SEVEN ADVISOR PANEL ============ */
+        .advisor-panel {
+            background: linear-gradient(180deg, #111827 0%, #0f172a 100%);
+            border-top: 1px solid #1e3a5f;
+            padding: 12px 16px;
+            flex-shrink: 0;
+        }
+        
+        .advisor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .advisor-title {
+            font-size: 11px;
+            color: #60a5fa;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .advisor-title::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: #3b82f6;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        .sentiment-live {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+        }
+        
+        .sentiment-label { color: #737373; }
+        .sentiment-score { font-weight: 600; }
+        .sentiment-score.negative { color: #ef4444; }
+        .sentiment-score.neutral { color: #f59e0b; }
+        .sentiment-score.positive { color: #10b981; }
+        
+        .suggested-response {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .suggested-label {
+            font-size: 10px;
+            color: #60a5fa;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .suggested-text {
+            font-size: 13px;
+            line-height: 1.5;
+            color: #94a3b8;
+        }
+        
+        .suggested-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .use-suggestion-btn {
+            background: #3b82f6;
+            border: none;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        .dismiss-btn {
+            background: transparent;
+            border: 1px solid #334155;
+            color: #94a3b8;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        /* ============ COMPOSE AREA ============ */
+        .compose-area {
+            background: #111113;
+            border-top: 1px solid #262626;
+            padding: 12px 16px;
+            padding-bottom: max(12px, env(safe-area-inset-bottom));
+            flex-shrink: 0;
+        }
+        
+        .compose-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+        
+        .compose-input {
+            flex: 1;
+            background: #1a1a1c;
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #e5e5e5;
+            font-family: inherit;
+            resize: none;
+            max-height: 120px;
+            min-height: 44px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        
+        .compose-input:focus {
+            border-color: #7c3aed;
+        }
+        
+        .compose-input::placeholder {
+            color: #737373;
+        }
+        
+        .send-btn {
+            width: 44px;
+            height: 44px;
+            background: #7c3aed;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.15s, background 0.15s;
+        }
+        
+        .send-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .send-btn:disabled {
+            background: #333;
+            cursor: not-allowed;
+        }
+        
+        /* ============ ACTION DRAWER ============ */
+        .action-drawer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #141416;
+            border-top: 1px solid #262626;
+            border-radius: 20px 20px 0 0;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-out;
+            z-index: 200;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        .action-drawer.open {
+            transform: translateY(0);
+        }
+        
+        .drawer-handle {
+            width: 36px;
+            height: 4px;
+            background: #404040;
+            border-radius: 2px;
+            margin: 12px auto;
+        }
+        
+        .drawer-header {
+            padding: 0 20px 16px;
+            border-bottom: 1px solid #262626;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .drawer-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .drawer-close {
+            background: none;
+            border: none;
+            color: #737373;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px;
+        }
+        
+        .drawer-content {
+            padding: 16px 20px;
+            padding-bottom: max(20px, env(safe-area-inset-bottom));
+        }
+        
+        .action-section {
+            margin-bottom: 20px;
+        }
+        
+        .action-section-title {
+            font-size: 11px;
+            color: #737373;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+        
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .action-btn {
+            background: #1a1a1c;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 14px;
+            color: #e5e5e5;
+            font-size: 13px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .action-btn:active {
+            background: #262626;
+            border-color: #404040;
+        }
+        
+        .action-btn .icon {
+            font-size: 20px;
+        }
+        
+        .action-btn .label {
+            font-weight: 500;
+        }
+        
+        .action-btn .desc {
+            font-size: 11px;
+            color: #737373;
+        }
+        
+        .action-btn.highlight {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+        
+        .action-btn.highlight .label {
+            color: #10b981;
+        }
+        
+        /* Department quick dial */
+        .dept-quick {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .dept-btn {
+            flex: 1;
+            background: #1a1a1c;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .dept-btn:active {
+            background: #262626;
+        }
+        
+        .dept-btn .name {
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+        
+        .dept-btn .status {
+            font-size: 10px;
+        }
+        
+        .dept-btn .status.enroute { color: #f59e0b; }
+        .dept-btn .status.standby { color: #3b82f6; }
+        .dept-btn .status.ready { color: #10b981; }
+        
+        /* Resolution tracker */
+        .resolution-tracker {
+            background: #1a1a1c;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 14px;
+        }
+        
+        .resolution-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .resolution-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .resolution-status.in-progress { color: #f59e0b; }
+        .resolution-status.resolved { color: #10b981; }
+        
+        .resolution-status::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+        
+        .resolution-timer {
+            font-size: 11px;
+            color: #737373;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .resolution-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .timeline-item {
+            display: flex;
+            gap: 10px;
+            font-size: 12px;
+        }
+        
+        .timeline-time {
+            color: #737373;
+            font-family: 'JetBrains Mono', monospace;
+            min-width: 50px;
+        }
+        
+        .timeline-event { color: #a3a3a3; }
+        
+        .timeline-item.current .timeline-event {
+            color: #f59e0b;
+            font-weight: 500;
+        }
+        
+        /* Action bar toggle */
+        .action-bar-toggle {
+            position: fixed;
+            bottom: 76px;
+            right: 16px;
+            width: 48px;
+            height: 48px;
+            background: #262626;
+            border: 1px solid #404040;
+            border-radius: 50%;
+            color: #e5e5e5;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        
+        .action-bar-toggle:active {
+            transform: scale(0.95);
+        }
+        
+        /* Overlay */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 150;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        
+        .drawer-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        /* ============ RETURN CONTROL MODAL ============ */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 300;
+            padding: 20px;
+        }
+        
+        .modal-overlay.active { display: flex; }
+        
+        .modal {
+            background: #141416;
+            border: 1px solid #10b981;
+            border-radius: 16px;
+            padding: 24px;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .modal-icon { font-size: 32px; margin-bottom: 12px; }
+        .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+        .modal-desc { color: #a3a3a3; font-size: 14px; margin-bottom: 20px; line-height: 1.6; }
+        
+        .modal-summary {
+            background: #1a1a1c;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .summary-title {
+            font-size: 11px;
+            color: #737373;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            text-align: center;
+        }
+        
+        .summary-stat .value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #10b981;
+        }
+        
+        .summary-stat .label {
+            font-size: 10px;
+            color: #737373;
+        }
+        
+        .transition-option {
+            background: #1a1a1c;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 16px;
+        }
+        
+        .transition-label {
+            font-size: 12px;
+            color: #737373;
+            margin-bottom: 8px;
+        }
+        
+        .transition-input {
+            width: 100%;
+            background: #0d0d0f;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 10px 12px;
+            color: #e5e5e5;
+            font-size: 13px;
+            font-family: inherit;
+            resize: none;
+        }
+        
+        .transition-input::placeholder {
+            color: #737373;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .modal-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .modal-btn.confirm {
+            background: #10b981;
+            color: white;
+        }
+        
+        .modal-btn.cancel {
+            background: #262626;
+            border: 1px solid #404040;
+            color: #e5e5e5;
+        }
+        
+        /* ============ DESKTOP STYLES ============ */
+        @media (min-width: 768px) {
+            .takeover-container {
+                flex-direction: row;
+            }
+            
+            .chat-area {
+                flex: 1;
+                border-right: 1px solid #262626;
+            }
+            
+            .right-panel {
+                width: 360px;
+                display: flex;
+                flex-direction: column;
+                background: #0d0d0f;
+            }
+            
+            .advisor-panel {
+                border-top: none;
+                border-bottom: 1px solid #1e3a5f;
+            }
+            
+            .actions-panel {
+                flex: 1;
+                overflow-y: auto;
+                padding: 16px;
+            }
+            
+            .action-bar-toggle {
+                display: none;
+            }
+            
+            .action-drawer {
+                display: none;
+            }
+            
+            .compose-area {
+                padding-bottom: 12px;
+            }
+        }
+        
+        /* Hide right panel on mobile */
+        @media (max-width: 767px) {
+            .right-panel {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-left">
+            <div class="takeover-badge">
+                <div class="takeover-dot"></div>
+                <span class="takeover-text">TAKEOVER MODE</span>
+            </div>
+            <div class="guest-mini">
+                <div class="guest-mini-avatar" style="background-image: url('https://res.cloudinary.com/tajoomii/image/upload/v1762735537/qmcrezhvymshgytzgaxs.jpg');"></div>
+                <div>
+                    <div class="guest-mini-name">Vanessa Liu</div>
+                    <div class="guest-mini-meta">X-Card VIP • Room 4127</div>
+                </div>
+            </div>
+        </div>
+        <button class="return-btn" onclick="showReturnModal()">
+            <span>↩</span> Return to Seven
+        </button>
+    </header>
+
+    <div class="takeover-container">
+        <!-- Chat Area -->
+        <div class="chat-area">
+            <div class="chat-messages" id="chatMessages">
+                <div class="day-divider"><span>Today</span></div>
+                
+                <!-- Previous messages (Seven automated) -->
+                <div class="message seven-auto">
+                    <div class="message-bubble">Welcome to Las Vegas, Vanessa! Your Skyline Tower Suite (Strip View) is ready.</div>
+                    <div class="message-meta">
+                        <span class="message-sender">Seven (Auto)</span>
+                        <span>Mon 5:15 PM</span>
+                    </div>
+                </div>
+                
+                <div class="message guest">
+                    <div class="message-bubble">Council Oak, please. 7:30 PM.</div>
+                    <div class="message-meta">Mon 5:17 PM</div>
+                </div>
+                
+                <div class="message seven-auto">
+                    <div class="message-bubble">Council Oak 7:30 PM confirmed. I'll check in with you later to make sure everything's perfect.</div>
+                    <div class="message-meta">
+                        <span class="message-sender">Seven (Auto)</span>
+                        <span>Mon 5:18 PM</span>
+                    </div>
+                </div>
+                
+                <div class="day-divider"><span>Wednesday</span></div>
+                
+                <!-- Crisis message -->
+                <div class="message guest">
+                    <div class="message-bubble">Seven, I think someone took my diamond bracelet. I left it in the safe last night and it's gone.</div>
+                    <div class="message-meta">Wed 9:45 AM • <span style="color: #ef4444;">Distressed</span></div>
+                </div>
+                
+                <!-- Host takeover begins -->
+                <div class="message host">
+                    <div class="message-bubble">I'm very sorry to hear that, Vanessa. Let's take care of this immediately.
+
+I'm notifying our security and housekeeping teams to assist—please don't touch anything in the room until they arrive.
+
+They'll handle this discreetly and professionally.</div>
+                    <div class="message-meta">
+                        <span class="message-sender">You (as Seven)</span>
+                        <span>Wed 9:46 AM</span>
+                        <span>✓✓</span>
+                    </div>
+                </div>
+                
+                <div class="message guest">
+                    <div class="message-bubble">Okay, I'm waiting. This is really upsetting.</div>
+                    <div class="message-meta">Wed 9:48 AM • <span style="color: #ef4444;">Distressed</span></div>
+                </div>
+                
+                <div class="message host">
+                    <div class="message-bubble">I completely understand, Vanessa. Our security supervisor Mike is on his way to your room right now—he'll be there in about 2 minutes.
+
+I've also arranged for some calming tea to be brought up. We're going to get this sorted out.</div>
+                    <div class="message-meta">
+                        <span class="message-sender">You (as Seven)</span>
+                        <span>Wed 9:49 AM</span>
+                        <span>✓✓</span>
+                    </div>
+                </div>
+                
+                <!-- Guest typing -->
+                <div class="typing-indicator" id="typingIndicator" style="display: none;">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            </div>
+            
+            <!-- Seven's Advisory Panel -->
+            <div class="advisor-panel">
+                <div class="advisor-header">
+                    <div class="advisor-title">Seven Advisor</div>
+                    <div class="sentiment-live">
+                        <span class="sentiment-label">Live sentiment:</span>
+                        <span class="sentiment-score negative" id="sentimentScore">-0.72</span>
+                    </div>
+                </div>
+                <div class="suggested-response" id="suggestionPanel">
+                    <div class="suggested-label">💡 Suggested response</div>
+                    <div class="suggested-text" id="suggestionText">If she responds positively to the tea gesture, consider offering a complimentary spa treatment for later today to help her decompress after this stress.</div>
+                    <div class="suggested-actions">
+                        <button class="use-suggestion-btn" onclick="useSuggestion()">Use this</button>
+                        <button class="dismiss-btn" onclick="dismissSuggestion()">Dismiss</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Compose Area -->
+            <div class="compose-area">
+                <div class="compose-wrapper">
+                    <textarea class="compose-input" id="composeInput" placeholder="Type a message as Seven..." rows="1"></textarea>
+                    <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Panel (Desktop) -->
+        <div class="right-panel">
+            <div class="advisor-panel" style="display: none;">
+                <!-- Duplicated for desktop layout -->
+            </div>
+            
+            <div class="actions-panel">
+                <!-- Resolution Tracker -->
+                <div class="action-section">
+                    <div class="action-section-title">Resolution Status</div>
+                    <div class="resolution-tracker">
+                        <div class="resolution-header">
+                            <div class="resolution-status in-progress">In Progress</div>
+                            <div class="resolution-timer" id="resolutionTimer">00:04:23</div>
+                        </div>
+                        <div class="resolution-timeline">
+                            <div class="timeline-item">
+                                <span class="timeline-time">9:45</span>
+                                <span class="timeline-event">Issue reported</span>
+                            </div>
+                            <div class="timeline-item">
+                                <span class="timeline-time">9:45</span>
+                                <span class="timeline-event">Security alerted</span>
+                            </div>
+                            <div class="timeline-item">
+                                <span class="timeline-time">9:46</span>
+                                <span class="timeline-event">Host takeover</span>
+                            </div>
+                            <div class="timeline-item current">
+                                <span class="timeline-time">9:49</span>
+                                <span class="timeline-event">Security en route</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Departments -->
+                <div class="action-section">
+                    <div class="action-section-title">Departments</div>
+                    <div class="dept-quick">
+                        <div class="dept-btn">
+                            <div class="name">Security</div>
+                            <div class="status enroute">En route</div>
+                        </div>
+                        <div class="dept-btn">
+                            <div class="name">Housekeeping</div>
+                            <div class="status standby">Standby</div>
+                        </div>
+                        <div class="dept-btn">
+                            <div class="name">F&B</div>
+                            <div class="status ready">Tea sent</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="action-section">
+                    <div class="action-section-title">Quick Actions</div>
+                    <div class="action-grid">
+                        <button class="action-btn highlight">
+                            <span class="icon">✓</span>
+                            <span class="label">Mark Resolved</span>
+                            <span class="desc">Close this incident</span>
+                        </button>
+                        <button class="action-btn">
+                            <span class="icon">🎁</span>
+                            <span class="label">Send Comp</span>
+                            <span class="desc">Spa, dining, upgrade</span>
+                        </button>
+                        <button class="action-btn">
+                            <span class="icon">📝</span>
+                            <span class="label">Add Note</span>
+                            <span class="desc">Internal record</span>
+                        </button>
+                        <button class="action-btn">
+                            <span class="icon">📞</span>
+                            <span class="label">Call Guest</span>
+                            <span class="desc">Direct phone</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Guest Context -->
+                <div class="action-section">
+                    <div class="action-section-title">Guest Context</div>
+                    <div class="resolution-tracker">
+                        <div style="font-size: 13px; line-height: 1.8;">
+                            <div style="margin-bottom: 6px;">
+                                <span style="color: #737373;">LTV:</span>
+                                <span style="color: #d4af37; font-weight: 600;">$420,000</span>
+                            </div>
+                            <div style="margin-bottom: 6px;">
+                                <span style="color: #737373;">This visit theo:</span>
+                                <span>$37,777</span>
+                            </div>
+                            <div style="margin-bottom: 6px;">
+                                <span style="color: #737373;">Preferences:</span>
+                                <span>Baccarat, Spa</span>
+                            </div>
+                            <div>
+                                <span style="color: #737373;">Notes:</span>
+                                <span>Values discretion</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Action Drawer Toggle (Mobile) -->
+    <button class="action-bar-toggle" onclick="toggleDrawer()">⚡</button>
+    
+    <!-- Drawer Overlay -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+    
+    <!-- Action Drawer (Mobile) -->
+    <div class="action-drawer" id="actionDrawer">
+        <div class="drawer-handle"></div>
+        <div class="drawer-header">
+            <span class="drawer-title">Actions</span>
+            <button class="drawer-close" onclick="toggleDrawer()">×</button>
+        </div>
+        <div class="drawer-content">
+            <!-- Resolution Tracker -->
+            <div class="action-section">
+                <div class="action-section-title">Resolution Status</div>
+                <div class="resolution-tracker">
+                    <div class="resolution-header">
+                        <div class="resolution-status in-progress">In Progress</div>
+                        <div class="resolution-timer">00:04:23</div>
+                    </div>
+                    <div class="resolution-timeline">
+                        <div class="timeline-item">
+                            <span class="timeline-time">9:45</span>
+                            <span class="timeline-event">Issue reported</span>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-time">9:45</span>
+                            <span class="timeline-event">Security alerted</span>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-time">9:46</span>
+                            <span class="timeline-event">Host takeover</span>
+                        </div>
+                        <div class="timeline-item current">
+                            <span class="timeline-time">9:49</span>
+                            <span class="timeline-event">Security en route</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Departments -->
+            <div class="action-section">
+                <div class="action-section-title">Departments</div>
+                <div class="dept-quick">
+                    <div class="dept-btn">
+                        <div class="name">Security</div>
+                        <div class="status enroute">En route</div>
+                    </div>
+                    <div class="dept-btn">
+                        <div class="name">Housekeeping</div>
+                        <div class="status standby">Standby</div>
+                    </div>
+                    <div class="dept-btn">
+                        <div class="name">F&B</div>
+                        <div class="status ready">Tea sent</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="action-section">
+                <div class="action-section-title">Quick Actions</div>
+                <div class="action-grid">
+                    <button class="action-btn highlight">
+                        <span class="icon">✓</span>
+                        <span class="label">Mark Resolved</span>
+                    </button>
+                    <button class="action-btn">
+                        <span class="icon">🎁</span>
+                        <span class="label">Send Comp</span>
+                    </button>
+                    <button class="action-btn">
+                        <span class="icon">📝</span>
+                        <span class="label">Add Note</span>
+                    </button>
+                    <button class="action-btn">
+                        <span class="icon">📞</span>
+                        <span class="label">Call Guest</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Return Control Modal -->
+    <div class="modal-overlay" id="returnModal">
+        <div class="modal">
+            <div class="modal-icon">↩️</div>
+            <h2 class="modal-title">Return Control to Seven</h2>
+            <p class="modal-desc">Seven will resume automated handling of this conversation. You can take over again at any time.</p>
+            
+            <div class="modal-summary">
+                <div class="summary-title">Takeover Summary</div>
+                <div class="summary-stats">
+                    <div class="summary-stat">
+                        <div class="value">4:23</div>
+                        <div class="label">Duration</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="value">3</div>
+                        <div class="label">Messages</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="value">1</div>
+                        <div class="label">Actions</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="transition-option">
+                <div class="transition-label">Transition message (optional)</div>
+                <textarea class="transition-input" rows="2" placeholder="e.g., 'Great news! Your bracelet has been found...'"></textarea>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn confirm" onclick="confirmReturn()">Return Control</button>
+                <button class="modal-btn cancel" onclick="hideReturnModal()">Keep Takeover</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-resize textarea
+        const composeInput = document.getElementById('composeInput');
+        composeInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+            
+            // Enable/disable send button
+            document.getElementById('sendBtn').disabled = this.value.trim() === '';
+        });
+        
+        // Send message
+        function sendMessage() {
+            const input = document.getElementById('composeInput');
+            const text = input.value.trim();
+            if (!text) return;
+            
+            const messagesContainer = document.getElementById('chatMessages');
+            
+            // Create message element
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message host';
+            messageDiv.innerHTML = `
+                <div class="message-bubble">${text}</div>
+                <div class="message-meta">
+                    <span class="message-sender">You (as Seven)</span>
+                    <span>${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                    <span>✓</span>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // Clear input
+            input.value = '';
+            input.style.height = 'auto';
+            document.getElementById('sendBtn').disabled = true;
+            
+            // Simulate delivery
+            setTimeout(() => {
+                messageDiv.querySelector('.message-meta span:last-child').textContent = '✓✓';
+            }, 1000);
+            
+            // Simulate guest typing after a delay
+            setTimeout(() => {
+                document.getElementById('typingIndicator').style.display = 'flex';
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 2000);
+        }
+        
+        // Use Seven's suggestion
+        function useSuggestion() {
+            const suggestion = document.getElementById('suggestionText').textContent;
+            const input = document.getElementById('composeInput');
+            input.value = suggestion;
+            input.style.height = 'auto';
+            input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+            document.getElementById('sendBtn').disabled = false;
+            input.focus();
+        }
+        
+        // Dismiss suggestion
+        function dismissSuggestion() {
+            document.getElementById('suggestionPanel').style.display = 'none';
+        }
+        
+        // Toggle action drawer
+        function toggleDrawer() {
+            const drawer = document.getElementById('actionDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+            drawer.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+        
+        // Return control modal
+        function showReturnModal() {
+            document.getElementById('returnModal').classList.add('active');
+        }
+        
+        function hideReturnModal() {
+            document.getElementById('returnModal').classList.remove('active');
+        }
+        
+        function confirmReturn() {
+            // In real app, would send transition message if provided
+            // and switch back to normal console view
+            alert('Control returned to Seven. Redirecting to console...');
+            hideReturnModal();
+        }
+        
+        // Resolution timer
+        let seconds = 263; // 4:23
+        setInterval(() => {
+            seconds++;
+            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const secs = (seconds % 60).toString().padStart(2, '0');
+            document.querySelectorAll('.resolution-timer, #resolutionTimer').forEach(el => {
+                el.textContent = `00:${mins}:${secs}`;
+            });
+        }, 1000);
+        
+        // Simulate sentiment updates
+        const sentiments = [-0.72, -0.68, -0.65, -0.58, -0.52, -0.45];
+        let sentimentIndex = 0;
+        setInterval(() => {
+            if (sentimentIndex < sentiments.length - 1) {
+                sentimentIndex++;
+                const score = sentiments[sentimentIndex];
+                const scoreEl = document.getElementById('sentimentScore');
+                scoreEl.textContent = score.toFixed(2);
+                
+                if (score > -0.5) {
+                    scoreEl.className = 'sentiment-score neutral';
+                }
+            }
+        }, 8000);
+        
+        // Enter to send
+        composeInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        
+        // Initial scroll to bottom
+        document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+    </script>
+</body>
+</html>

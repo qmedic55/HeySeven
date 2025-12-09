@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hey Seven • Host Console</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; overflow: hidden; }
+        
+        body {
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            background: #0a0a0b;
+            color: #e5e5e5;
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.1); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+            20%, 40%, 60%, 80% { transform: translateX(4px); }
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-6px); }
+        }
+        
+        .pulse { animation: pulse 2s infinite; }
+        .shake { animation: shake 0.6s ease-in-out; }
+        .slide-up { animation: slideUp 0.3s ease-out; }
+        
+        /* ============ LOCK SCREEN ============ */
+        .lock-screen {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(180deg, #0a0a0b 0%, #111113 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        
+        .lock-screen.hidden { display: none; }
+        
+        .lock-time {
+            font-size: 68px;
+            font-weight: 200;
+            letter-spacing: -2px;
+            margin-bottom: 4px;
+        }
+        
+        .lock-date {
+            font-size: 16px;
+            color: #a3a3a3;
+            margin-bottom: 50px;
+        }
+        
+        .notification-card {
+            background: rgba(25, 25, 30, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            border-radius: 16px;
+            padding: 14px 16px;
+            width: 100%;
+            max-width: 360px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .notification-card:active { transform: scale(0.98); }
+        
+        .notif-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        
+        .notif-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #d4af37, #f4d03f);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #0a0a0b;
+            font-size: 14px;
+        }
+        
+        .notif-app { font-size: 13px; font-weight: 600; flex: 1; }
+        .notif-time { font-size: 11px; color: #737373; }
+        
+        .notif-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ef4444;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .notif-body {
+            font-size: 13px;
+            color: #a3a3a3;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+        
+        .notif-guest {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+        
+        .notif-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            border: 2px solid #ef4444;
+        }
+        
+        .notif-guest-name { font-size: 12px; font-weight: 600; }
+        .notif-guest-meta { font-size: 10px; color: #737373; }
+        
+        .tap-hint {
+            margin-top: 32px;
+            font-size: 12px;
+            color: #525252;
+        }
+        
+        /* ============ MAIN APP ============ */
+        .app {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .app.active { display: flex; }
+        
+        /* ============ HEADER ============ */
+        header {
+            background: #0f0f11;
+            border-bottom: 1px solid #262626;
+            padding: 10px 16px;
+            flex-shrink: 0;
+            z-index: 100;
+        }
+        
+        header.takeover-mode {
+            background: #12121a;
+            border-bottom-color: #7c3aed;
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #d4af37, #f4d03f);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #0a0a0b;
+            font-size: 14px;
+        }
+        
+        .brand-text { font-size: 14px; font-weight: 600; }
+        
+        .alert-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            padding: 5px 10px;
+            border-radius: 14px;
+            font-size: 11px;
+            color: #ef4444;
+            font-weight: 600;
+        }
+        
+        .alert-pill .dot {
+            width: 6px;
+            height: 6px;
+            background: #ef4444;
+            border-radius: 50%;
+        }
+        
+        .takeover-pill {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            background: rgba(124, 58, 237, 0.2);
+            border: 1px solid #7c3aed;
+            padding: 5px 10px;
+            border-radius: 14px;
+            font-size: 11px;
+            color: #a78bfa;
+            font-weight: 600;
+        }
+        
+        .takeover-pill.active { display: flex; }
+        .alert-pill.hidden { display: none; }
+        
+        /* Guest bar */
+        .guest-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            border-radius: 10px;
+            padding: 10px 12px;
+        }
+        
+        .guest-bar.resolved {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: rgba(16, 185, 129, 0.25);
+        }
+        
+        .guest-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            border: 2px solid #ef4444;
+            flex-shrink: 0;
+        }
+        
+        .guest-bar.resolved .guest-avatar {
+            border-color: #10b981;
+        }
+        
+        .guest-details { flex: 1; min-width: 0; }
+        
+        .guest-name-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 2px;
+        }
+        
+        .guest-name { font-size: 14px; font-weight: 600; }
+        
+        .tier-badge {
+            background: linear-gradient(135deg, #d4af37, #f4d03f);
+            color: #0a0a0b;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9px;
+            font-weight: 700;
+        }
+        
+        .guest-meta { font-size: 11px; color: #a3a3a3; }
+        
+        .crisis-type {
+            text-align: right;
+        }
+        
+        .crisis-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #ef4444;
+            margin-bottom: 2px;
+        }
+        
+        .guest-bar.resolved .crisis-label {
+            color: #10b981;
+        }
+        
+        .crisis-time { font-size: 10px; color: #737373; }
+        
+        /* ============ CONVERSATION VIEW ============ */
+        .conversation-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: #0a0a0b;
+        }
+        
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .day-marker {
+            text-align: center;
+            padding: 12px 0 8px;
+        }
+        
+        .day-marker span {
+            background: #1a1a1c;
+            color: #737373;
+            padding: 4px 12px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        
+        .msg {
+            max-width: 82%;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .msg.guest { align-self: flex-start; }
+        .msg.seven { align-self: flex-end; }
+        .msg.host { align-self: flex-end; }
+        
+        .msg-bubble {
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 14px;
+            line-height: 1.45;
+        }
+        
+        .msg.guest .msg-bubble {
+            background: #1a1a1c;
+            border: 1px solid #2a2a2c;
+            border-radius: 4px 16px 16px 16px;
+        }
+        
+        .msg.seven .msg-bubble {
+            background: #1e3a5f;
+            border: 1px solid #2d4a6f;
+            border-radius: 16px 4px 16px 16px;
+        }
+        
+        .msg.host .msg-bubble {
+            background: #7c3aed;
+            border-radius: 16px 4px 16px 16px;
+        }
+        
+        .msg-meta {
+            font-size: 10px;
+            color: #525252;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0 4px;
+        }
+        
+        .msg.seven .msg-meta,
+        .msg.host .msg-meta {
+            justify-content: flex-end;
+        }
+        
+        .msg-sender { color: #60a5fa; font-weight: 500; }
+        .msg.host .msg-sender { color: #a78bfa; }
+        
+        .msg-sentiment { color: #ef4444; font-weight: 500; }
+        .msg-sentiment.positive { color: #10b981; }
+        .msg-sentiment.neutral { color: #f59e0b; }
+        
+        /* Crisis message highlight */
+        .msg.crisis .msg-bubble {
+            background: #1a1a1c;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.1);
+        }
+        
+        .crisis-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin: 8px 0;
+            font-size: 12px;
+            color: #ef4444;
+        }
+        
+        .crisis-indicator .icon { font-size: 14px; }
+        
+        /* Typing indicator */
+        .typing {
+            display: none;
+            gap: 4px;
+            padding: 10px 14px;
+            background: #1a1a1c;
+            border: 1px solid #2a2a2c;
+            border-radius: 4px 16px 16px 16px;
+            max-width: 70px;
+            align-self: flex-start;
+        }
+        
+        .typing.active { display: flex; }
+        
+        .typing-dot {
+            width: 7px;
+            height: 7px;
+            background: #525252;
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite;
+        }
+        
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        /* ============ BOTTOM ACTION PANEL ============ */
+        .action-panel {
+            background: #0f0f11;
+            border-top: 1px solid #262626;
+            flex-shrink: 0;
+        }
+        
+        /* Context bar (collapsible) */
+        .context-bar {
+            display: flex;
+            gap: 8px;
+            padding: 10px 16px;
+            overflow-x: auto;
+            border-bottom: 1px solid #1a1a1c;
+        }
+        
+        .context-chip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #1a1a1c;
+            border: 1px solid #2a2a2c;
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 11px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        
+        .context-chip .label { color: #737373; }
+        .context-chip .value { color: #e5e5e5; font-weight: 500; }
+        .context-chip .value.negative { color: #ef4444; }
+        .context-chip .value.enroute { color: #f59e0b; }
+        .context-chip .value.done { color: #10b981; }
+        
+        /* Response section */
+        .response-section {
+            padding: 12px 16px;
+        }
+        
+        .response-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .response-label {
+            font-size: 11px;
+            color: #737373;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .response-status {
+            font-size: 10px;
+            color: #d4af37;
+            background: rgba(212, 175, 55, 0.1);
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+        
+        .response-draft {
+            background: #1a1a1c;
+            border: 1px solid #2a2a2c;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #a3a3a3;
+            margin-bottom: 12px;
+            max-height: 80px;
+            overflow-y: auto;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .btn:active { transform: scale(0.97); }
+        
+        .btn-approve {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            flex: 2;
+        }
+        
+        .btn-edit {
+            background: #262626;
+            border: 1px solid #3a3a3a;
+            color: #e5e5e5;
+        }
+        
+        .btn-takeover {
+            background: #7c3aed;
+            color: white;
+        }
+        
+        /* ============ COMPOSE (TAKEOVER MODE) ============ */
+        .compose-section {
+            display: none;
+            padding: 12px 16px;
+            padding-bottom: max(12px, env(safe-area-inset-bottom));
+        }
+        
+        .compose-section.active { display: block; }
+        
+        .advisor-hint {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: rgba(59, 130, 246, 0.08);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin-bottom: 10px;
+        }
+        
+        .advisor-hint .icon {
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        
+        .advisor-hint .text {
+            font-size: 12px;
+            color: #94a3b8;
+            line-height: 1.4;
+            flex: 1;
+        }
+        
+        .advisor-hint .use-btn {
+            background: #3b82f6;
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        
+        .compose-row {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+        
+        .compose-input {
+            flex: 1;
+            background: #1a1a1c;
+            border: 1px solid #2a2a2c;
+            border-radius: 20px;
+            padding: 10px 16px;
+            font-size: 14px;
+            color: #e5e5e5;
+            font-family: inherit;
+            resize: none;
+            max-height: 100px;
+            min-height: 40px;
+            outline: none;
+        }
+        
+        .compose-input:focus { border-color: #7c3aed; }
+        .compose-input::placeholder { color: #525252; }
+        
+        .send-btn {
+            width: 40px;
+            height: 40px;
+            background: #7c3aed;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        
+        .send-btn:disabled { background: #333; }
+        
+        /* Return button */
+        .return-bar {
+            display: none;
+            padding: 8px 16px;
+            border-bottom: 1px solid #1a1a1c;
+        }
+        
+        .return-bar.active { display: block; }
+        
+        .return-btn {
+            width: 100%;
+            background: transparent;
+            border: 1px solid #7c3aed;
+            color: #a78bfa;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        /* ============ MODALS ============ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+            z-index: 300;
+        }
+        
+        .modal-overlay.active { display: flex; }
+        
+        .modal {
+            background: #141416;
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+            padding-bottom: max(20px, env(safe-area-inset-bottom));
+            width: 100%;
+            max-width: 420px;
+        }
+        
+        .modal.takeover { border-top: 2px solid #7c3aed; }
+        .modal.return { border-top: 2px solid #10b981; }
+        
+        .modal-handle {
+            width: 32px;
+            height: 4px;
+            background: #404040;
+            border-radius: 2px;
+            margin: 0 auto 16px;
+        }
+        
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .modal-desc {
+            font-size: 13px;
+            color: #a3a3a3;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+        
+        .modal-info {
+            background: #1a1a1c;
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 16px;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+        
+        .modal-info-title {
+            font-size: 11px;
+            color: #737373;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .modal-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .modal-btn.primary-takeover { background: #7c3aed; color: white; }
+        .modal-btn.primary-return { background: #10b981; color: white; }
+        .modal-btn.secondary { background: #262626; color: #e5e5e5; }
+        
+        /* Summary stats */
+        .summary-stats {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .stat {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            background: #1a1a1c;
+            border-radius: 8px;
+        }
+        
+        .stat .value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #10b981;
+        }
+        
+        .stat .label {
+            font-size: 10px;
+            color: #737373;
+            margin-top: 2px;
+        }
+        
+        /* ============ RESPONSIVE ============ */
+        @media (min-width: 500px) {
+            .modal {
+                border-radius: 16px;
+                margin: auto;
+            }
+            
+            .modal-handle { display: none; }
+            .modal-buttons { flex-direction: row; }
+        }
+    </style>
+</head>
+<body>
+    <!-- LOCK SCREEN -->
+    <div class="lock-screen" id="lockScreen">
+        <div class="lock-time">9:45</div>
+        <div class="lock-date">Wednesday, March 12</div>
+        
+        <div class="notification-card shake" onclick="openApp()">
+            <div class="notif-header">
+                <div class="notif-icon">7</div>
+                <div class="notif-app">Hey Seven</div>
+                <div class="notif-time">now</div>
+            </div>
+            <div class="notif-title">
+                <span class="pulse" style="width:6px;height:6px;background:#ef4444;border-radius:50%;"></span>
+                CRITICAL: Lost Item Report
+            </div>
+            <div class="notif-body">Guest reports diamond bracelet missing from safe. Theft suspected. Immediate attention required.</div>
+            <div class="notif-guest">
+                <div class="notif-avatar" style="background-image:url('https://res.cloudinary.com/tajoomii/image/upload/v1762735537/qmcrezhvymshgytzgaxs.jpg')"></div>
+                <div>
+                    <div class="notif-guest-name">Vanessa Liu</div>
+                    <div class="notif-guest-meta">X-Card VIP • Room 4127 • LTV $420K</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tap-hint">Tap to open</div>
+    </div>
+    
+    <!-- MAIN APP -->
+    <div class="app" id="app">
+        <header id="header">
+            <div class="header-top">
+                <div class="header-brand">
+                    <div class="logo">7</div>
+                    <span class="brand-text">Hey Seven</span>
+                </div>
+                <div class="alert-pill" id="alertPill">
+                    <span class="dot pulse"></span>
+                    Critical Alert
+                </div>
+                <div class="takeover-pill" id="takeoverPill">
+                    <span class="dot pulse" style="background:#7c3aed"></span>
+                    Takeover Active
+                </div>
+            </div>
+            
+            <div class="guest-bar" id="guestBar">
+                <div class="guest-avatar" style="background-image:url('https://res.cloudinary.com/tajoomii/image/upload/v1762735537/qmcrezhvymshgytzgaxs.jpg')"></div>
+                <div class="guest-details">
+                    <div class="guest-name-row">
+                        <span class="guest-name">Vanessa Liu</span>
+                        <span class="tier-badge">X-CARD</span>
+                    </div>
+                    <div class="guest-meta">Room 4127 • LTV $420K • Current theo $37,777</div>
+                </div>
+                <div class="crisis-type">
+                    <div class="crisis-label" id="crisisLabel">🚨 Lost Item</div>
+                    <div class="crisis-time">9:45 AM</div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- CONVERSATION -->
+        <div class="conversation-container">
+            <div class="messages" id="messages">
+                <!-- DAY 1: ARRIVAL -->
+                <div class="day-marker"><span>Monday, March 10</span></div>
+                
+                <div class="msg seven slide-up">
+                    <div class="msg-bubble">Hi Vanessa, this is Seven from Santa Casino Resort. We're looking forward to hosting you starting tomorrow! 🎰 Your Skyline Tower Suite with Strip View is confirmed.</div>
+                    <div class="msg-meta">
+                        <span class="msg-sender">Seven</span>
+                        <span>Sun 2:00 PM</span>
+                    </div>
+                </div>
+                
+                <div class="msg guest slide-up">
+                    <div class="msg-bubble">Thank you! Can't wait. Will be arriving around 5pm.</div>
+                    <div class="msg-meta">Sun 2:15 PM</div>
+                </div>
+                
+                <div class="msg seven slide-up">
+                    <div class="msg-bubble">Perfect! I'll have everything ready for you. Skip the front desk when you arrive—I'll send you a mobile check-in link.</div>
+                    <div class="msg-meta">
+                        <span class="msg-sender">Seven</span>
+                        <span>Sun 2:16 PM</span>
+                    </div>
+                </div>
+                
+                <div class="day-marker"><span>Monday, March 10</span></div>
+                
+                <div class="msg guest slide-up">
+                    <div class="msg-bubble">Hey! Just arrived 😊</div>
+                    <div class="msg-meta">Mon 5:05 PM</div>
+                </div>
+                
+                <div class="msg seven slide-up">
+                    <div class="msg-bubble">Perfect timing! Here's your check-in link:
+
+👉 Check in now - Room 4127
+
+Should take 30 seconds. Your room is ready.</div>
+                    <div class="msg-meta">
+                        <span class="msg-sender">Seven</span>
+                        <span>Mon 5:06 PM</span>
+                    </div>
+                </div>
+                
+                <div class="msg seven slide-up">
+                    <div class="msg-bubble">Welcome to Las Vegas, Vanessa! Your Skyline Tower Suite (Strip View) is ready.
+
+Check-in is under your name, and I've already coordinated luggage handling.
+
+If you'd like, I can hold a dinner reservation at Council Oak or Kuro for tonight.</div>
+                    <div class="msg-meta">
+                        <span class="msg-sender">Seven</span>
+                        <span>Mon 5:15 PM</span>
+                    </div>
+                </div>
+                
+                <div class="msg guest slide-up">
+                    <div class="msg-bubble">Council Oak, please. 7:30 PM.</div>
+                    <div class="msg-meta">Mon 5:17 PM</div>
+                </div>
+                
+                <div class="msg seven slide-up">
+                    <div class="msg-bubble">Council Oak 7:30 PM confirmed. I'll check in with you later to make sure everything's perfect. Enjoy your evening! 🥩</div>
+                    <div class="msg-meta">
+                        <span class="msg-sender">Seven</span>
+                        <span>Mon 5:18 PM</span>
+                    </div>
+                </div>
+                
+                <!-- DAY 2: SPA & GAMING -->
+                <div class="day-marker"><span>Tuesday, March 11</span></div>
+                
+                <div class="msg seven slide-up">
+                    <div class="msg-bubble">Good afternoon, Vanessa! Hope you had a great night. The spa has availability at 2pm today if you'd like some relaxation before tonight's activities.</div>
+                    <div class="msg-meta">
+                        <span class="msg-sender">Seven</span>
+                        <span>Tue 11:30 AM</span>
+                    </div>
+                </div>
+                
+                <div class="msg guest slide-up">
+                    <div class="msg-bubble">That sounds great. Book it.</div>
+                    <div class="msg-meta">Tue 11:45 AM</div>
+                </div>
+                
+                <div class="msg seven slide-up">
+                    <div class="msg-bubble">Done! Rock Spa at 2pm. I've requested your preferred deep tissue treatment based on your Tampa visits. 💆‍♀️</div>
+                    <div class="msg-meta">
+                        <span class="msg-sender">Seven</span>
+                        <span>Tue 11:46 AM</span>
+                    </div>
+                </div>
+                
+                <div class="msg seven slide-up">
+                    <div class="msg-bubble">Hope the spa treatments were relaxing. How was the service?</div>
+                    <div class="msg-meta">
+                        <span class="msg-sender">Seven</span>
+                        <span>Tue 4:45 PM</span>
+                    </div>
+                </div>
+                
+                <div class="msg guest slide-up">
+                    <div class="msg-bubble">Fantastic. Thank you, everything's been seamless so far.</div>
+                    <div class="msg-meta">
+                        Tue 4:47 PM
+                        <span class="msg-sentiment positive">• Positive</span>
+                    </div>
+                </div>
+                
+                <div class="msg seven slide-up">
+                    <div class="msg-bubble">Wonderful to hear! If you'd like to unwind later, I can arrange a Baccarat table at your preferred limit. Shall I reserve it for 9 PM?</div>
+                    <div class="msg-meta">
+                        <span class="msg-sender">Seven</span>
+                        <span>Tue 7:00 PM</span>
+                    </div>
+                </div>
+                
+                <div class="msg guest slide-up">
+                    <div class="msg-bubble">Yes, please. One high-limit table.</div>
+                    <div class="msg-meta">Tue 7:02 PM</div>
+                </div>
+                
+                <div class="msg seven slide-up">
+                    <div class="msg-bubble">Reserved! Table 7, high-limit Baccarat, 9 PM. Your preferred dealer James will be there. Good luck! 🎲</div>
+                    <div class="msg-meta">
+                        <span class="msg-sender">Seven</span>
+                        <span>Tue 7:03 PM</span>
+                    </div>
+                </div>
+                
+                <!-- DAY 3: CRISIS -->
+                <div class="day-marker"><span>Today — Wednesday, March 12</span></div>
+                
+                <div class="crisis-indicator">
+                    <span class="icon">⚠️</span>
+                    <span>Critical alert triggered at 9:45 AM — Seven paused automated responses</span>
+                </div>
+                
+                <div class="msg guest crisis slide-up">
+                    <div class="msg-bubble">Seven, I think someone took my diamond bracelet. I left it in the safe last night and it's gone.</div>
+                    <div class="msg-meta">
+                        9:45 AM
+                        <span class="msg-sentiment">• Highly Distressed (-0.87)</span>
+                    </div>
+                </div>
+                
+                <!-- Typing indicator -->
+                <div class="typing" id="typing">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- BOTTOM PANEL -->
+        <div class="action-panel" id="actionPanel">
+            <!-- Context chips -->
+            <div class="context-bar">
+                <div class="context-chip">
+                    <span class="label">Sentiment:</span>
+                    <span class="value negative">-0.87</span>
+                </div>
+                <div class="context-chip">
+                    <span class="label">Security:</span>
+                    <span class="value enroute">En route (2m)</span>
+                </div>
+                <div class="context-chip">
+                    <span class="label">Auto-actions:</span>
+                    <span class="value done">5 done</span>
+                </div>
+                <div class="context-chip">
+                    <span class="label">Marketing:</span>
+                    <span class="value done">Paused</span>
+                </div>
+            </div>
+            
+            <!-- Response section (before takeover) -->
+            <div class="response-section" id="responseSection">
+                <div class="response-header">
+                    <span class="response-label">Seven's Proposed Response</span>
+                    <span class="response-status">Awaiting approval</span>
+                </div>
+                <div class="response-draft">I'm very sorry to hear that, Vanessa. Let's take care of this immediately. I'm notifying our security and housekeeping teams to assist—please don't touch anything in the room until they arrive. They'll handle this discreetly and professionally.</div>
+                <div class="action-buttons">
+                    <button class="btn btn-approve" onclick="approveResponse()">✓ Send</button>
+                    <button class="btn btn-edit">Edit</button>
+                    <button class="btn btn-takeover" onclick="showTakeoverModal()">🎙️ Take Over</button>
+                </div>
+            </div>
+            
+            <!-- Return bar (during takeover) -->
+            <div class="return-bar" id="returnBar">
+                <button class="return-btn" onclick="showReturnModal()">↩ Return control to Seven</button>
+            </div>
+            
+            <!-- Compose section (during takeover) -->
+            <div class="compose-section" id="composeSection">
+                <div class="advisor-hint" id="advisorHint">
+                    <span class="icon">💡</span>
+                    <span class="text" id="advisorText">Consider reassuring her that security is almost there and offer a comfort gesture like tea.</span>
+                    <button class="use-btn" onclick="useSuggestion()">Use</button>
+                </div>
+                <div class="compose-row">
+                    <textarea class="compose-input" id="composeInput" placeholder="Type as Seven..." rows="1"></textarea>
+                    <button class="send-btn" id="sendBtn" disabled onclick="sendMessage()">➤</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- TAKEOVER MODAL -->
+    <div class="modal-overlay" id="takeoverModal">
+        <div class="modal takeover">
+            <div class="modal-handle"></div>
+            <div class="modal-title">🎙️ Take Over Conversation</div>
+            <div class="modal-desc">You'll message Vanessa directly. She'll still see messages as coming from Seven.</div>
+            <div class="modal-info">
+                <div class="modal-info-title">Seven will continue to:</div>
+                • Monitor sentiment in real-time<br>
+                • Coordinate Security, Housekeeping, F&B<br>
+                • Suggest responses (won't auto-send)<br>
+                • Track resolution timeline
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn primary-takeover" onclick="confirmTakeover()">Start Takeover</button>
+                <button class="modal-btn secondary" onclick="closeModal('takeoverModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- RETURN MODAL -->
+    <div class="modal-overlay" id="returnModal">
+        <div class="modal return">
+            <div class="modal-handle"></div>
+            <div class="modal-title">↩️ Return to Seven</div>
+            <div class="modal-desc">Seven will resume handling this conversation. You can take over again anytime.</div>
+            <div class="summary-stats">
+                <div class="stat">
+                    <div class="value" id="statDuration">0:00</div>
+                    <div class="label">Duration</div>
+                </div>
+                <div class="stat">
+                    <div class="value" id="statMessages">0</div>
+                    <div class="label">Messages</div>
+                </div>
+                <div class="stat">
+                    <div class="value">-0.52</div>
+                    <div class="label">Sentiment</div>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn primary-return" onclick="confirmReturn()">Return Control</button>
+                <button class="modal-btn secondary" onclick="closeModal('returnModal')">Keep Takeover</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let inTakeover = false;
+        let takeoverStart = null;
+        let messageCount = 0;
+        let timerInterval = null;
+        
+        // Open app
+        function openApp() {
+            document.getElementById('lockScreen').classList.add('hidden');
+            document.getElementById('app').classList.add('active');
+            scrollToBottom();
+        }
+        
+        // Scroll to bottom
+        function scrollToBottom() {
+            const msgs = document.getElementById('messages');
+            msgs.scrollTop = msgs.scrollHeight;
+        }
+        
+        // Approve response
+        function approveResponse() {
+            addMessage('seven', "I'm very sorry to hear that, Vanessa. Let's take care of this immediately.\n\nI'm notifying our security and housekeeping teams to assist—please don't touch anything in the room until they arrive.\n\nThey'll handle this discreetly and professionally.");
+            document.getElementById('responseSection').innerHTML = '<div style="text-align:center;padding:20px;color:#10b981;font-size:13px;">✓ Response sent. Seven is handling the conversation.</div>';
+        }
+        
+        // Show takeover modal
+        function showTakeoverModal() {
+            document.getElementById('takeoverModal').classList.add('active');
+        }
+        
+        // Close modal
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+        
+        // Confirm takeover
+        function confirmTakeover() {
+            closeModal('takeoverModal');
+            inTakeover = true;
+            takeoverStart = Date.now();
+            messageCount = 0;
+            
+            // Update UI
+            document.getElementById('header').classList.add('takeover-mode');
+            document.getElementById('alertPill').classList.add('hidden');
+            document.getElementById('takeoverPill').classList.add('active');
+            document.getElementById('responseSection').style.display = 'none';
+            document.getElementById('returnBar').classList.add('active');
+            document.getElementById('composeSection').classList.add('active');
+            
+            startTimer();
+            scrollToBottom();
+            document.getElementById('composeInput').focus();
+        }
+        
+        // Start timer
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                const secs = Math.floor((Date.now() - takeoverStart) / 1000);
+                const m = Math.floor(secs / 60);
+                const s = secs % 60;
+                document.getElementById('statDuration').textContent = `${m}:${s.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+        
+        // Show return modal
+        function showReturnModal() {
+            document.getElementById('statMessages').textContent = messageCount;
+            document.getElementById('returnModal').classList.add('active');
+        }
+        
+        // Confirm return
+        function confirmReturn() {
+            closeModal('returnModal');
+            clearInterval(timerInterval);
+            inTakeover = false;
+            
+            document.getElementById('header').classList.remove('takeover-mode');
+            document.getElementById('alertPill').classList.remove('hidden');
+            document.getElementById('takeoverPill').classList.remove('active');
+            document.getElementById('returnBar').classList.remove('active');
+            document.getElementById('composeSection').classList.remove('active');
+            document.getElementById('responseSection').style.display = 'block';
+            document.getElementById('responseSection').innerHTML = '<div style="text-align:center;padding:20px;color:#10b981;font-size:13px;">✓ Control returned. Seven is handling the conversation.</div>';
+            
+            document.getElementById('guestBar').classList.add('resolved');
+            document.getElementById('crisisLabel').textContent = '✓ Resolved';
+            document.getElementById('crisisLabel').style.color = '#10b981';
+        }
+        
+        // Add message to chat
+        function addMessage(type, text) {
+            const msgs = document.getElementById('messages');
+            const typing = document.getElementById('typing');
+            
+            const div = document.createElement('div');
+            div.className = `msg ${type} slide-up`;
+            
+            const now = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            if (type === 'host') {
+                div.innerHTML = `
+                    <div class="msg-bubble">${text.replace(/\n/g, '<br>')}</div>
+                    <div class="msg-meta">
+                        <span class="msg-sender">You (as Seven)</span>
+                        <span>${now}</span>
+                        <span>✓</span>
+                    </div>
+                `;
+            } else {
+                div.innerHTML = `
+                    <div class="msg-bubble">${text.replace(/\n/g, '<br>')}</div>
+                    <div class="msg-meta">
+                        <span class="msg-sender">Seven</span>
+                        <span>${now}</span>
+                    </div>
+                `;
+            }
+            
+            msgs.insertBefore(div, typing);
+            scrollToBottom();
+            
+            // Update delivery
+            if (type === 'host') {
+                setTimeout(() => {
+                    div.querySelector('.msg-meta span:last-child').textContent = '✓✓';
+                }, 800);
+            }
+        }
+        
+        // Compose handling
+        const input = document.getElementById('composeInput');
+        input.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+            document.getElementById('sendBtn').disabled = !this.value.trim();
+        });
+        
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey && input.value.trim()) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        
+        // Send message
+        function sendMessage() {
+            const text = input.value.trim();
+            if (!text) return;
+            
+            messageCount++;
+            addMessage('host', text);
+            
+            input.value = '';
+            input.style.height = 'auto';
+            document.getElementById('sendBtn').disabled = true;
+            
+            // Simulate guest response
+            setTimeout(() => {
+                document.getElementById('typing').classList.add('active');
+                scrollToBottom();
+                
+                setTimeout(() => {
+                    document.getElementById('typing').classList.remove('active');
+                    
+                    const responses = [
+                        "Okay, thank you. I'm just really worried.",
+                        "I appreciate you helping. This bracelet means a lot to me.",
+                        "How long until someone gets here?"
+                    ];
+                    
+                    const div = document.createElement('div');
+                    div.className = 'msg guest slide-up';
+                    div.innerHTML = `
+                        <div class="msg-bubble">${responses[Math.min(messageCount - 1, 2)]}</div>
+                        <div class="msg-meta">
+                            ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                            <span class="msg-sentiment neutral">• Anxious</span>
+                        </div>
+                    `;
+                    document.getElementById('messages').insertBefore(div, document.getElementById('typing'));
+                    scrollToBottom();
+                    
+                    // Update advisor
+                    const hints = [
+                        "Security is 1 minute out. Let her know the timeline.",
+                        "Consider offering tea service as a comfort gesture.",
+                        "Good news coming—bracelet was found on bathroom floor!"
+                    ];
+                    document.getElementById('advisorText').textContent = hints[Math.min(messageCount - 1, 2)];
+                    
+                }, 2000);
+            }, 1500);
+        }
+        
+        // Use suggestion
+        function useSuggestion() {
+            input.value = document.getElementById('advisorText').textContent;
+            input.style.height = 'auto';
+            input.style.height = Math.min(input.scrollHeight, 100) + 'px';
+            document.getElementById('sendBtn').disabled = false;
+            input.focus();
+        }
+        
+        // Close modals on overlay click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) overlay.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>

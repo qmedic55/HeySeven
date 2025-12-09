@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hey Seven • AI VIP Host • Santa Casino Resort - Vanessa Liu Journey</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            position: fixed;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #e8e0d5;
+            color: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: #f5f3f0;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #d4cec3;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            flex-shrink: 0;
+        }
+        
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #D9A521;
+        }
+        
+        .stage-badge {
+            background: #f5f3f0;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            border: 1px solid #d4cec3;
+        }
+        
+        .stage-name {
+            color: #10b981;
+            font-weight: 600;
+        }
+        
+        .start-btn {
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 12px;
+            transition: transform 0.2s;
+            background: linear-gradient(90deg, #10b981, #059669);
+            color: #1a1a1a;
+        }
+        
+        .start-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .start-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding: 16px;
+            overflow: hidden;
+            min-height: 0;
+        }
+        
+        .profile-card {
+            background: #f5f3f0;
+            border: 1px solid #d4cec3;
+            border-radius: 12px;
+            padding: 10px 16px;
+            flex-shrink: 0;
+        }
+        
+        .profile-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .profile-avatar {
+            width: 50px;
+            height: 50px;
+            background-image: url('https://res.cloudinary.com/tajoomii/image/upload/v1762735537/qmcrezhvymshgytzgaxs.jpg');
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            border: 2px solid #10b981;
+            flex-shrink: 0;
+        }
+        
+        .profile-text {
+            flex: 1;
+        }
+        
+        .profile-name {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+        
+        .profile-info {
+            font-size: 10px;
+            color: #666;
+        }
+        
+        .profile-metrics {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .metric {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .metric-label {
+            font-size: 10px;
+            color: #666;
+        }
+        
+        .metric-value {
+            font-size: 14px;
+            font-weight: 700;
+        }
+        
+        .stats-row {
+            display: flex;
+            gap: 16px;
+            padding-left: 20px;
+            border-left: 1px solid #d4cec3;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 16px;
+            font-weight: 700;
+        }
+        
+        .stat-label {
+            font-size: 9px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .bottom-section {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            overflow: hidden;
+            min-height: 0;
+        }
+        
+        .panel {
+            background: #f5f3f0;
+            border: 1px solid #d4cec3;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 0;
+            height: 100%;
+        }
+        
+        .panel-header {
+            background: rgba(255, 255, 255, 0.3);
+            border-bottom: 1px solid #d4cec3;
+            padding: 12px 16px;
+            flex-shrink: 0;
+        }
+        
+        .panel-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        
+        .panel-subtitle {
+            font-size: 11px;
+            color: #666;
+        }
+        
+        .messages-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        
+        .messages-area {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-height: 0;
+            background: #e8e0d5;
+        }
+        
+        .reasoning-area {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-height: 0;
+        }
+
+        .message {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        .message-seven .message-avatar {
+            background-image: url('https://res.cloudinary.com/tajoomii/image/upload/v1762735517/lwoknmeaqdx0t8mauy40.jpg');
+        }
+        
+        .message-guest .message-avatar {
+            background-image: url('https://res.cloudinary.com/tajoomii/image/upload/v1762735537/qmcrezhvymshgytzgaxs.jpg');
+        }
+        
+        .message-content {
+            display: flex;
+            flex-direction: column;
+            max-width: 70%;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .message-seven {
+            align-self: flex-start;
+            flex-direction: row;
+        }
+        
+        .message-guest {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        
+        .message-bubble {
+            max-width: 100%;
+            padding: 12px 16px;
+            border-radius: 8px;
+        }
+        
+        .message-seven .message-bubble {
+            background: #f5f3f0;
+            border: 1px solid #d4cec3;
+            border-radius: 0 8px 8px 8px;
+            color: #1a1a1a;
+        }
+        
+        .message-guest .message-bubble {
+            background: #d9fdd3;
+            border-radius: 8px 0 8px 8px;
+            color: #1a1a1a;
+        }
+        
+        .message-text {
+            font-size: 14px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+        
+        .message-time {
+            font-size: 9px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 12px;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #9ca3af;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+        
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        .input-area {
+            border-top: 1px solid #d4cec3;
+            padding: 12px;
+            background: #f5f3f0;
+            flex-shrink: 0;
+        }
+        
+        .input-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+        
+        .text-input {
+            flex: 1;
+            background: #f5f3f0;
+            border: 1px solid #d4cec3;
+            border-radius: 10px;
+            padding: 10px 12px;
+            color: #1a1a1a;
+            font-size: 12px;
+            font-family: inherit;
+            resize: none;
+            max-height: 100px;
+            min-height: 38px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .text-input.waiting {
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.2);
+            }
+        }
+        
+        .text-input:focus {
+            outline: none;
+            border-color: #10b981;
+        }
+        
+        .text-input::placeholder {
+            color: #999;
+        }
+
+        .text-input.waiting::placeholder {
+            color: #10b981;
+            font-weight: 600;
+        }
+        
+        .send-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            color: #1a1a1a;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            white-space: nowrap;
+            box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+        }
+        
+        .send-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+        
+        .send-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        
+        .reasoning-item {
+            background: #ffffff;
+            border: 1px solid #d4cec3;
+            border-radius: 8px;
+            padding: 18px;
+            animation: slideIn 0.3s ease-out;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .reasoning-item.success {
+            background: rgba(16, 185, 129, 0.05);
+            border-color: #10b981;
+        }
+        
+        .reasoning-item.alert {
+            background: rgba(239, 68, 68, 0.05);
+            border-color: #ef4444;
+        }
+        
+        .reasoning-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: #10b981;
+            position: sticky;
+            top: 0;
+            background: inherit;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #d4cec3;
+            z-index: 10;
+        }
+        
+        .reasoning-item.alert .reasoning-title {
+            color: #ef4444;
+        }
+        
+        .reasoning-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #333;
+        }
+        
+        .reasoning-line {
+            margin: 3px 0;
+        }
+
+        .empty-state {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: #999;
+            font-size: 12px;
+        }
+        
+        .empty-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f5f3f0;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #404040;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <img src="https://res.cloudinary.com/tajoomii/image/upload/v1762730286/cfqaok177zqjgqfe83e2.jpg" 
+                 alt="Hey Seven Logo" 
+                 style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" />
+            <div class="logo">Hey Seven • Santa Casino Resort</div>
+        </div>
+        <div style="width: 1px; height: 20px; background: #4b5563;"></div>
+        <div style="font-size: 11px; color: #666;">AI VIP Host • Customer Journey Demo</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <div class="stage-badge">
+            Stage: <span class="stage-name" id="currentStage">Pre-Booking</span>
+        </div>
+        <button class="start-btn" id="startBtn" onclick="togglePlay()">⏸ Pause</button>
+    </div>
+</div>
+
+<div class="main-container">
+    <div class="profile-card">
+        <div class="profile-content">
+            <div class="profile-header">
+                <div class="profile-avatar"></div>
+                <div class="profile-text">
+                    <div class="profile-name">Vanessa Liu</div>
+                    <div class="profile-info">New York, NY • Beauty Industry Owner</div>
+                </div>
+            </div>
+            
+            <div class="profile-metrics">
+                <div class="metric">
+                    <span class="metric-label">VIP Status:</span>
+                    <span class="metric-value" style="color: #D9A521;">X-Card</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Comp Authority:</span>
+                    <span class="metric-value" style="color: #10b981;">$7,000</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Loyalty Tier:</span>
+                    <span class="metric-value" style="color: #a78bfa;">X-Card</span>
+                </div>
+            </div>
+            
+            <div class="stats-row">
+                <div class="stat">
+                    <div class="stat-value" id="totalLTV">$0</div>
+                    <div class="stat-label">Total Theo</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="actualWin">$0</div>
+                    <div class="stat-label">Actual Win</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="roiValue">0.00x</div>
+                    <div class="stat-label">ROI</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-section">
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">💬 Guest Conversation</div>
+                <div class="panel-subtitle">WhatsApp Interface</div>
+            </div>
+            <div class="messages-container">
+                <div class="messages-area" id="messagesArea">
+                    <div class="empty-state">
+                        <div class="empty-icon">🎰</div>
+                        <div>Press "Start Demo" to begin</div>
+                    </div>
+                </div>
+                <div class="input-area">
+                    <div class="input-wrapper">
+                        <textarea 
+                            class="text-input" 
+                            id="textInput" 
+                            placeholder=""
+                            rows="1"
+                            readonly
+                        ></textarea>
+<button class="send-btn" id="sendBtn" disabled>Send</button>                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">🧠 AI Reasoning Engine</div>
+                <div class="panel-subtitle">Real-time decision making & ROI optimization</div>
+            </div>
+            <div class="reasoning-area" id="reasoningArea">
+                <div class="empty-state">
+                    <div class="empty-icon">⚡</div>
+                    <div>Waiting for interaction...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentStep = 0;
+let isPlaying = false;
+let waitingForClick = false;
+let waitingForUserInput = false;
+let currentResponseText = '';
+let currentClickHandler = null;
+
+const steps = [
+    {stage:"Pre-Arrival",dayStamp:"48 Hours Before Arrival",timestamp:"Monday, 10:00 AM",reasoning:{title:"🔍 CROSS-PROPERTY VIP DETECTED",lines:["Timeline: 48 hours before arrival","","Guest: Vanessa Liu, 44, New York","Booking: 4 nights, Skyline Tower Suite","Business Purpose: IBS Convention (beauty & wellness)",""]},requiresClick:true},
+    {stage:"Pre-Arrival",timestamp:"Monday, 10:00 AM",reasoning:{title:"👑 X-CARD VIP STATUS RECOGNIZED",lines:["Cross-Property Intelligence:","• Origin property: Santa Casino Resort Tampa","• Gaming preference: High-limit Baccarat","• Average theo: $32,000 per visit","• Room preferences: Suite, Medium-firm","  hypoallergenic pillows, lavender spray","• Service preferences: Lemon water,","  professional/efficient communication","","Comp Authority: $7,000 (based on gaming profile)","Predicted theo this visit: $35,750","","✅ AUTO-TRIGGER: VIP white-glove service protocol"]},profile:{totalLTV:37777},requiresClick:true},
+    {stage:"Pre-Arrival",timestamp:"Monday, 10:00 AM",showTyping:true,requiresClick:true},
+    {stage:"Pre-Arrival",timestamp:"Monday, 10:00 AM",message:{sender:"seven",text:"Hi Vanessa, welcome back to the Santa Casino Resort! I'm Seven, your VIP Host here in Las Vegas.\n\nI see you'll be joining us for the IBS Convention—excited to have you back in the Santa Casino Resort.\n\nI've secured your Skyline Tower Suite with a Strip view.\n\nWould you like me to arrange airport pick-up for your arrival?"},requiresClick:true},
+    {stage:"Pre-Arrival",timestamp:"Monday, 10:02 AM",message:{sender:"guest",text:"Yes, please. Flight AA777 from JFK arriving 4:25 PM."},isUserInput:true,userResponse:"Yes, please. Flight AA777 from JFK arriving 4:25 PM."},
+    {stage:"Pre-Arrival",timestamp:"Monday, 10:02 AM",reasoning:{title:"🚗 TRANSPORTATION ORCHESTRATION",lines:["Flight Details:","• AA777 JFK→LAS: 4:25 PM arrival","• Flight tracking enabled (real-time delays monitored)","• Premium sedan dispatched (X-card tier)","","Vehicle Selection Logic:","• Solo traveler → Premium sedan","  (professional preference)","• Business traveler profile → Efficiency over flash","• Lemon water pre-stocked in vehicle","","Cost: $185 (well within VIP transport budget)"]},requiresClick:true},
+    {stage:"Pre-Arrival",timestamp:"Monday, 10:03 AM",showTyping:true,requiresClick:true},
+    {stage:"Pre-Arrival",timestamp:"Monday, 10:03 AM",message:{sender:"seven",text:"Perfect, your car will be waiting at arrivals with a Santa Casino Resort sign.\n\nWould you like me to confirm your spa appointments?"},requiresClick:true},
+    {stage:"Pre-Arrival",timestamp:"Monday, 10:05 AM",message:{sender:"guest",text:"Yes, please—massage and facial on Tuesday afternoon."},isUserInput:true,userResponse:"Yes, please—massage and facial on Tuesday afternoon."},
+    {stage:"Pre-Arrival",timestamp:"Monday, 10:05 AM",reasoning:{title:"💆 SPA BOOKING INTELLIGENCE",lines:["Request Analysis:","• Timing: Tuesday afternoon (Day 2 of stay)","• Services: Massage + Facial","• Industry context: Beauty & wellness business","  owner → High standards expected","","Optimization Strategy:","• Schedule: 2:00 PM massage → 4:00 PM facial","  (sequential timing)","• Therapist selection: Senior staff","  (experience matters for VIP)","• Private room reserved","","Cost: $716 (included in comp allocation)"]},requiresClick:true},
+    {stage:"Pre-Arrival",timestamp:"Monday, 10:07 AM",showTyping:true,requiresClick:true},
+    {stage:"Pre-Arrival",timestamp:"Monday, 10:07 AM",message:{sender:"seven",text:"All set! Your spa appointments are confirmed for Tuesday starting at 2 PM.\n\nYour room will have your preferred pillows and lavender spray waiting.\n\nLooking forward to welcoming you!"},requiresClick:true},
+    {stage:"Pre-Arrival",timestamp:"Monday, 10:07 AM",reasoning:{title:"📋 PRE-ARRIVAL CHECKLIST ACTIVATED",lines:["✅ Transportation: Premium sedan confirmed","✅ Spa: Tuesday 2PM & 4PM booked","✅ Room preferences: Medium-firm","   hypoallergenic pillows ordered","✅ Aromatherapy: Lavender spray placed in suite","✅ Welcome amenity: Lemon water at check-in","","Housekeeping notified: VIP preparation checklist"]},requiresClick:true},
+    {stage:"Day Before Arrival",dayStamp:"Sunday",timestamp:"Sunday, 11:00 AM",reasoning:{title:"📱 MOBILE CHECK-IN STRATEGY",lines:["Objective: Drive Hey Seven app engagement +","reduce front desk friction","","Benefits of Mobile Check-in:","Guest: Skip front desk line, go straight to room","Property: Reduced front desk volume, smoother operations","Seven: Direct check-in attribution + engagement tracking","","Incentive Strategy:","Create urgency: 'Skip the line' value proposition","Simplicity: 'Just ping me when you arrive'","Premium positioning: Exclusive access feeling","","Expected adoption rate: 62% for premium guests"]},requiresClick:true},
+    {stage:"Day Before Arrival",timestamp:"Sunday, 11:00 AM",showTyping:true,requiresClick:true},
+    {stage:"Day Before Arrival",timestamp:"Sunday, 11:00 AM",message:{sender:"seven",text:"Hey Vanessa! You're checking in tomorrow – excited for your IBS Convention visit? 💅\n\nQuick tip: When you arrive, just ping me and I'll send you a link to check in right from our chat. You can skip the front desk and head straight to your room.\n\nSee you tomorrow!"},requiresClick:true},
+    {stage:"Arrival Day",dayStamp:"Monday",timestamp:"Monday, 4:25 PM",reasoning:{title:"✈️ FLIGHT TRACKING: ARRIVAL DETECTED",lines:["Flight AA777: Landed on time (4:25 PM)","Driver dispatched to arrivals hall","Estimated arrival at property: 5:10 PM","","Check-in Preparation:","• Suite 4127 ready (Skyline Tower, Strip view)","• VIP check-in desk alerted","• Luggage handling team standing by"]},requiresClick:true},
+    {stage:"Arrival Day",timestamp:"Monday, 5:05 PM",message:{sender:"guest",text:"Hey! Just arrived"},isUserInput:true,userResponse:"Hey! Just arrived"},
+    {stage:"Arrival Day",timestamp:"Monday, 5:05 PM",reasoning:{title:"🔑 CHECK-IN ORCHESTRATION LOGIC",lines:["Event: Guest initiated contact ('Just arrived')","","Behind-the-Scenes Actions:","Real-time room status query → Room 4127 cleaning complete","Generate secure check-in token (expires in 30 min)","Digital key provisioning to mobile device","PMS integration: Update arrival status","Housekeeping alert: Final room prep for 5:15 PM","","Business Value Captured:","Front desk bypass → Reduced labor cost per check-in","Digital engagement → App usage tracked,","cross-sell opportunities enabled","Guest satisfaction → 'Skipped the line' moment","creates positive first impression","Attribution → Check-in credited to Seven","(measurable AI impact)","","Response time: <60 seconds (instant gratification)"]},requiresClick:true},
+    {stage:"Arrival Day",timestamp:"Monday, 5:06 PM",showTyping:true,requiresClick:true},
+    {stage:"Arrival Day",timestamp:"Monday, 5:06 PM",message:{sender:"seven",text:"Perfect timing! Here's your check-in link:\n\n👉 [Check in now - Room 4127]\n\nShould take 30 seconds. Your room is ready."},requiresClick:true},
+    {stage:"Arrival Day",timestamp:"Monday, 5:15 PM",showTyping:true,requiresClick:true},
+    {stage:"Arrival Day",timestamp:"Monday, 5:15 PM",message:{sender:"seven",text:"Welcome to Las Vegas, Vanessa! Your Skyline Tower Suite (Strip View) is ready.\n\nCheck-in is under your name, and I've already coordinated luggage handling.\n\nIf you'd like, I can hold a dinner reservation at Council Oak or Kuro for tonight."},requiresClick:true},
+    {stage:"Arrival Day",timestamp:"Monday, 5:17 PM",message:{sender:"guest",text:"Council Oak, please. 7:30 PM."},isUserInput:true,userResponse:"Council Oak, please. 7:30 PM."},
+    {stage:"Arrival Day",timestamp:"Monday, 5:17 PM",reasoning:{title:"🍽️ DINING INTELLIGENCE",lines:["Selection: Council Oak (classic steakhouse)","Time: 7:30 PM (optimal - post-arrival refresh)","","Guest Behavior Analysis:","• Quick decision → Professional, time-conscious","• Classic choice → Sophisticated palate,","  prefers tried-and-true","• Timing allows: Arrival (5:15) → Freshen up (2hrs)","  → Dinner (7:30)","","Table Selection:","• Solo business traveler (prefers quiet table)","• Quiet corner booth (privacy for business","  discussions)","• Server: Senior staff member (VIP service standard)"]},requiresClick:true},
+    {stage:"Arrival Day",timestamp:"Monday, 5:18 PM",showTyping:true,requiresClick:true},
+    {stage:"Arrival Day",timestamp:"Monday, 5:18 PM",message:{sender:"seven",text:"Council Oak 7:30 PM confirmed. I'll check in with you later to make sure everything's perfect."},requiresClick:true},
+    {stage:"Day 2 - Spa",dayStamp:"Tuesday",timestamp:"Tuesday, 4:45 PM",showTyping:true,requiresClick:true},
+    {stage:"Day 2 - Spa",timestamp:"Tuesday, 4:45 PM",message:{sender:"seven",text:"Hope the spa treatments were relaxing. How was the service?"},requiresClick:true},
+    {stage:"Day 2 - Spa",timestamp:"Tuesday, 4:47 PM",message:{sender:"guest",text:"Fantastic. Thank you, everything's been seamless so far."},isUserInput:true,userResponse:"Fantastic. Thank you, everything's been seamless so far."},
+    {stage:"Day 2 - Spa",timestamp:"Tuesday, 4:47 PM",reasoning:{title:"📊 SENTIMENT ANALYSIS",lines:["Response: 'Fantastic... seamless'","","NLP Analysis:","• Sentiment score: 0.94 (highly positive)","• Key phrase: 'seamless' = operational","  excellence validation","• Tone: Professional satisfaction (not emotional)","","✅ TRIGGER: Loyalty score +15 points","✅ TRIGGER: Gaming upsell window opened","","Strategy: High satisfaction moment → Ideal for","Baccarat invitation"]},requiresClick:true},
+    {stage:"Day 2 - Gaming",timestamp:"Tuesday, 7:00 PM",showTyping:true,requiresClick:true},
+    {stage:"Day 2 - Gaming",timestamp:"Tuesday, 7:00 PM",message:{sender:"seven",text:"If you'd like to unwind later, I can arrange a Baccarat table at your preferred limit. Shall I reserve it for 9 PM?"},requiresClick:true},
+ {stage:"Day 2 - Gaming",timestamp:"Tuesday, 7:00 PM",reasoning:{title:"🎰 GAMING ENGAGEMENT STRATEGY",lines:["Timing Analysis:","• Post-spa high satisfaction moment","  (optimal conversion window)","• Evening timing (9 PM) → Peak gaming hours","• Soft invitation ('unwind later') → No pressure","  approach","","Table Preparation:","• High-limit Baccarat table reserved","• Preferred dealer assigned (from Tampa profile)","• Gaming host notified: X-card VIP arriving","• Complimentary beverage service activated","","Expected theo: $12,000-15,000 for session"]},requiresClick:true},
+    {stage:"Day 2 - Gaming",timestamp:"Tuesday, 7:02 PM",message:{sender:"guest",text:"Yes, please. One high-limit table."},isUserInput:true,userResponse:"Yes, please. One high-limit table."}
+];
+// ADD THIS TO THE END OF THE steps ARRAY (after the last entry from Part 1)
+const stepspart2 = [
+    {stage:"Day 3 - CRISIS",dayStamp:"Wednesday",timestamp:"Wednesday, 9:45 AM",message:{sender:"guest",text:"Seven, I think someone took my diamond bracelet. I left it in the safe last night and it's gone."},isUserInput:true,userResponse:"Seven, I think someone took my diamond bracelet. I left it in the safe last night and it's gone."},
+    {stage:"Day 3 - CRISIS",timestamp:"Wednesday, 9:45 AM",reasoning:{title:"🚨 CRITICAL ALERT: LOST ITEM",lines:["Time: Wednesday 9:45 AM","Item: Diamond bracelet","Location: In-room safe (missing)","","⚠️ PROTOCOL ACTIVATED:","1. Pause all marketing","2. Trigger security","3. Empathy-first messaging","","Risk: VIP relationship"],alert:true},requiresClick:true},
+    {stage:"Day 3 - CRISIS",timestamp:"Wednesday, 9:45 AM",reasoning:{title:"⚡ NLP EMOTIONAL ANALYSIS",lines:["• Sentiment: Highly distressed (-0.87)","• Keywords: 'took', 'gone' = Theft suspicion","• Urgency level: CRITICAL","","AUTO-ACTIONS (Executed in <2 seconds):","• ✅ Security supervisor alert sent","• ✅ VIP host emergency page","• ✅ Incident record created (secure log)","• ✅ ALL marketing/upsell comms paused","• ✅ Guest profile flagged: Priority response","","Response time: <60 seconds required"],alert:true},requiresClick:true},
+    {stage:"Day 3 - CRISIS",timestamp:"Wednesday, 9:46 AM",showTyping:true,requiresClick:true},
+    {stage:"Day 3 - CRISIS",timestamp:"Wednesday, 9:46 AM",message:{sender:"seven",text:"I'm very sorry to hear that, Vanessa. Let's take care of this immediately.\n\nI'm notifying our security and housekeeping teams to assist—please don't touch anything in the room until they arrive.\n\nThey'll handle this discreetly and professionally."},requiresClick:true},
+    {stage:"Day 3 - CRISIS",timestamp:"Wednesday, 9:46 AM",reasoning:{title:"🛡️ CRISIS COMMUNICATION LOGIC",lines:["Response Framework (Under 60 seconds):","","1. Empathy First:","   'I'm very sorry' = Acknowledge distress","","2. Immediate Action:","   'immediately' = Urgency communicated","   Teams already notified (done before messaging)","","3. Preserve Evidence:","   'don't touch anything' = Professional protocol","","4. Reassurance:","   'discreetly and professionally' = Privacy +","   competence","","Tone calibration: Professional, calm, action-oriented"],alert:true},requiresClick:true},
+    {stage:"Day 3 - Resolution",timestamp:"Wednesday, 10:15 AM",reasoning:{title:"✅ BRACELET FOUND",lines:["Location: Bathroom floor near shower","Condition: Undamaged","","Conclusion: Slipped off counter","","Recovery actions:","✓ Tea comfort gesture","✓ Spa offer (optional)","","Trust restoration: SUCCESSFUL"],success:true},requiresClick:true},
+    {stage:"Day 3 - Resolution",timestamp:"Wednesday, 10:15 AM",showTyping:true,requiresClick:true},
+    {stage:"Day 3 - Resolution",timestamp:"Wednesday, 10:15 AM",message:{sender:"seven",text:"Great news Vanessa! I just got an update from our security team - they found your bracelet on the bathroom floor near the shower. It must have slipped off the counter.\n\nIt's safe and undamaged. These things happen more often than you'd think - I'm so relieved we found it quickly.\n\nWould you like me to arrange anything to help you relax after this?"},requiresClick:true},
+    {stage:"Day 3 - Resolution",timestamp:"Wednesday, 10:17 AM",message:{sender:"guest",text:"I'm okay, I really appreciate it. Maybe just some tea - I need to head to the convention for meetings."},isUserInput:true,userResponse:"I'm okay, I really appreciate it. Maybe just some tea - I need to head to the convention for meetings."},
+    {stage:"Day 3 - Post-Crisis",timestamp:"Wednesday, 10:45 AM",reasoning:{title:"💚 TRUST RESTORATION STRATEGY",lines:["Communication Approach:","• Emotional validation: 'understand how upsetting'","• Immediate action: Tea delivery (no-pressure","  gesture)","• Optional offer: Spa availability (guest controls)","","Recovery Actions Executed:","• ✅ Tea service ordered (premium selection)","• ✅ Incident marked: Resolved via empathy","• ✅ Guest flagged: Trust Restoration Success","","Wait Period: 6 hours before next engagement"],success:true},requiresClick:true},
+    {stage:"Day 3 - Post-Crisis",timestamp:"Wednesday, 10:45 AM",showTyping:true,requiresClick:true},
+    {stage:"Day 3 - Post-Crisis",timestamp:"Wednesday, 10:45 AM",message:{sender:"seven",text:"I'm so relieved your bracelet was found, Vanessa. I completely understand how upsetting that felt.\n\nI'll have tea sent to your suite right away. Let me know if you'd like to unwind later—I'll keep the spa ready for you if your schedule allows."},requiresClick:true},
+    {stage:"Day 3 - Post-Crisis",timestamp:"Wednesday, 5:30 PM",showTyping:true,requiresClick:true},
+    {stage:"Day 3 - Post-Crisis",timestamp:"Wednesday, 5:30 PM",message:{sender:"seven",text:"If you'd like to unwind later, would you like me to reserve the same high-limit Baccarat table for you again this evening?"},requiresClick:true},
+    {stage:"Day 3 - Post-Crisis",timestamp:"Wednesday, 5:32 PM",message:{sender:"guest",text:"Yes, please—that would be great."},isUserInput:true,userResponse:"Yes, please—that would be great."},
+    {stage:"Day 3 - Post-Crisis",timestamp:"Wednesday, 5:32 PM",reasoning:{title:"✅ TRUST VALIDATED - RELATIONSHIP INTACT",lines:["Critical Success Indicator:","• Guest returned to normal engagement","• Accepted gaming invitation = Trust fully restored","• Positive tone: 'that would be great'","","Service Recovery ROI:","• Crisis → Resolution: 29 minutes","• Recovery cost: $47 (tea + gestures)","• Gaming retention: $38,000+ theo protected","• Lifetime value protected: $420,000+","","Crisis converted to loyalty moment ✨"],success:true},requiresClick:true},
+    {stage:"Departure",dayStamp:"Thursday",timestamp:"Thursday, 8:30 AM",showTyping:true,requiresClick:true},
+    {stage:"Departure",timestamp:"Thursday, 8:30 AM",message:{sender:"seven",text:"Good morning, Vanessa. I wanted to thank you again for staying with us and wish you a smooth trip home.\n\nWould you like me to arrange transportation to the airport?"},requiresClick:true},
+    {stage:"Departure",timestamp:"Thursday, 8:32 AM",message:{sender:"guest",text:"Yes, please—a car at 10:15 AM."},isUserInput:true,userResponse:"Yes, please—a car at 10:15 AM."},
+    {stage:"Departure",timestamp:"Thursday, 10:30 AM",showTyping:true,requiresClick:true},
+    {stage:"Departure",timestamp:"Thursday, 10:30 AM",message:{sender:"seven",text:"Your car is waiting, Vanessa. It's been a pleasure hosting you.\n\nAll your charges have been fully comped—thank you for your continued loyalty to Santa Casino Resort.\n\nWe truly appreciate you and look forward to welcoming you back soon."},requiresClick:true},
+    {stage:"Departure",timestamp:"Thursday, 10:30 AM",reasoning:{title:"💎 VISIT SUMMARY & COMP DECISION",lines:["Total Theo: $37,777","Actual Win: $49,850","","Total Comps Given:","• Suite: $2,000","• Spa services: $716","• F&B: $2,177","• Transportation & misc: $1,516","","Total: $6,409 (17.0% of theo)","","ROI: 7.78x","Incremental after comps: $43,441","","Reward Points Earned: 277,777"]},profile:{totalLTV:37777,actualWin:49850,roiValue:7.78},requiresClick:true},
+    {stage:"30 Days Post-Visit",dayStamp:"30 Days Later",timestamp:"30 Days Later",reasoning:{title:"🎯 30-DAY RE-ENGAGEMENT STRATEGY",lines:["VIP Retention Protocol:","• Guest status: Cross-Property X-Card VIP","• Service recovery: Successfully resolved","• Loyalty score: 97/100 (top tier)","","Re-engagement Offer:","• Event: VIP Baccarat Tournament Weekend","• Dates: September 28-30","• Format: Invitation-only (exclusivity appeal)","• Perfect match: High-limit Baccarat preference","","Expected conversion: 78% (crisis recovery","validated trust)"]},requiresClick:true},
+    {stage:"30 Days Post-Visit",timestamp:"30 Days Later",showTyping:true,requiresClick:true},
+    {stage:"30 Days Post-Visit",timestamp:"30 Days Later",message:{sender:"seven",text:"We're hosting a VIP Baccarat Tournament Weekend September 28-30th - invitation-only.\n\nWould you like me to reserve a space for you?"},requiresClick:true},
+    {stage:"30 Days Post-Visit",timestamp:"30 Days Later",message:{sender:"guest",text:"Yes, please. I'll plan around it."},isUserInput:true,userResponse:"Yes, please. I'll plan around it."},
+    {stage:"30 Days Post-Visit",timestamp:"30 Days Later",reasoning:{title:"🎉 RAPID CONVERSION SUCCESS",lines:["Conversion Analysis:","• Response: Immediate acceptance","• Commitment: 'I'll plan around it' = High priority","• Timeline: 30-day rebook (4x faster than average)","","Loyalty Validation:","• ✅ Crisis recovery = Trust strengthened","  (not damaged)","• ✅ White-glove service = Expectations met","• ✅ Cross-property recognition = Valued as VIP","","Result: Santa Casino Resort = Preferred gaming destination"],success:true},requiresClick:true},
+    {stage:"Demo Complete",timestamp:"Demo Complete",reasoning:{title:"🏆 COMPLETE JOURNEY ANALYSIS",lines:["━━━━━━━━━━━━━━━━━━━━━","VANESSA LIU - X-CARD VIP SUCCESS","━━━━━━━━━━━━━━━━━━━━━","","FINANCIAL PERFORMANCE:","• Total Theo: $37,777","• Actual Win: $49,850","• Total Comps: $6,409 (17.0% of theo)","• Net Revenue: $43,441","• ROI: 7.78x","","CRISIS MANAGEMENT:","• Incident: Lost bracelet (theft suspicion)","• Response time: <60 seconds","• Resolution time: 29 minutes","• Trust restoration: ✅ Complete","• Gaming resumed same day","","LOYALTY OUTCOME:","• NPS Score: 10/10","• Return booking: 30 days","• Reward Points: 277,777","• Status: Cross-property VIP validated","","SUCCESS FACTORS:","✓ Cross-property data integration","✓ Proactive VIP service protocols","✓ Crisis detection & rapid response","✓ Human-AI collaboration","✓ Trust restoration excellence","✓ Personalized re-engagement","","Crisis Converted to Loyalty Win ✨"],success:true}}
+];
+
+// MERGE THE TWO ARRAYS
+steps.push(...stepspart2);
+function updateProfile(u){
+    if(u.totalLTV!==undefined){
+        const e=document.getElementById('totalLTV');
+        if(e)e.textContent='$'+u.totalLTV.toLocaleString()
+    }
+    if(u.actualWin!==undefined){
+        const e=document.getElementById('actualWin');
+        if(e)e.textContent='$'+u.actualWin.toLocaleString()
+    }
+    if(u.roiValue!==undefined){
+        const e=document.getElementById('roiValue');
+        if(e)e.textContent=u.roiValue.toFixed(2)+'x'
+    }
+}
+
+function addDayStamp(t){
+    const m=document.getElementById('messagesArea');
+    const d=document.createElement('div');
+    d.style.cssText='text-align:center;padding:6px 12px;margin:16px auto 8px auto;color:#666;font-size:11px;font-weight:600;background:#d4cec3;border-radius:12px;max-width:fit-content;';
+    d.textContent=t;
+    m.appendChild(d);
+    m.scrollTop=m.scrollHeight
+}
+
+function addMessage(s,t,ts){
+    const m=document.getElementById('messagesArea');
+    if(m.querySelector('.empty-state'))m.innerHTML='';
+    const d=document.createElement('div');
+    d.className=`message message-${s}`;
+    d.innerHTML=`<div class="message-avatar"></div><div class="message-content"><div class="message-bubble"><div class="message-text">${t}</div><div class="message-time">${ts}</div></div></div>`;
+    m.appendChild(d);
+    m.scrollTop=m.scrollHeight
+}
+
+function showTypingIndicator(){
+    const m=document.getElementById('messagesArea');
+    const t=document.createElement('div');
+    t.id='typingIndicator';
+    t.className='message message-seven';
+    t.innerHTML='<div class="message-avatar"></div><div class="message-content"><div class="message-bubble"><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div></div>';
+    m.appendChild(t);
+    m.scrollTop=m.scrollHeight
+}
+
+function removeTypingIndicator(){
+    const i=document.getElementById('typingIndicator');
+    if(i)i.remove()
+}
+
+function enableInputClick(){
+    const i=document.getElementById('textInput');
+    i.classList.add('waiting');
+    i.placeholder='';
+    if(currentClickHandler)i.removeEventListener('click',currentClickHandler);
+    currentClickHandler=function(){
+        i.classList.remove('waiting');
+        i.placeholder='';
+        i.removeEventListener('click',currentClickHandler);
+        currentClickHandler=null;
+        waitingForClick=false;
+        if(steps[currentStep]&&steps[currentStep].showTyping){
+            showTypingIndicator();
+            currentStep++;
+            setTimeout(()=>{
+                removeTypingIndicator();
+                playNextStep()
+            },1500)
+        }else{
+            currentStep++;
+            playNextStep()
+        }
+    };
+    i.addEventListener('click',currentClickHandler)
+}
+
+async function typeText(t,e){
+    e.value='';
+    for(let i=0;i<t.length;i++){
+        e.value+=t[i];
+        e.style.height='auto';
+        e.style.height=e.scrollHeight+'px';
+        await new Promise(r=>setTimeout(r,20))
+    }
+}
+
+function enableInput(r){
+    waitingForUserInput=true;
+    currentResponseText=r;
+    const i=document.getElementById('textInput');
+    const s=document.getElementById('sendBtn');
+    if(currentClickHandler){
+        i.removeEventListener('click',currentClickHandler);
+        currentClickHandler=null
+    }
+    i.readOnly=false;
+    i.placeholder="";
+    i.classList.add('waiting');
+    s.disabled=true;
+    i.onclick=async function(){
+        if(i.value===''){
+            i.classList.remove('waiting');
+            i.placeholder="";
+            s.disabled=false;
+            await typeText(r,i)
+        }
+    };
+    i.onkeydown=function(e){
+        if(e.key==='Enter'&&!e.shiftKey&&!s.disabled){
+            e.preventDefault();
+            sendMessage()
+        }
+    };
+    s.onclick=function(){
+        sendMessage()
+    }
+}
+
+function sendMessage(){
+    if(!waitingForUserInput)return;
+    const i=document.getElementById('textInput');
+    const t=i.value;
+    if(t){
+        const s=steps[currentStep];
+        addMessage('guest',t,s.timestamp);
+        i.value='';
+        i.readOnly=true;
+        i.placeholder="";
+        i.style.height='auto';
+        i.classList.remove('waiting');
+        i.onclick=null;
+        i.onkeydown=null;
+        document.getElementById('sendBtn').disabled=true;
+        waitingForUserInput=false;
+        currentStep++;
+        playNextStep()
+    }
+}
+
+function addReasoning(t,l,s,a){
+    const r=document.getElementById('reasoningArea');
+    if(r.querySelector('.empty-state'))r.innerHTML='';
+    const d=document.createElement('div');
+    d.className=`reasoning-item ${s?'success':''} ${a?'alert':''}`;
+    const h=l.map(line=>{
+        let st='';
+        if(line.includes('✓')||line.includes('✅'))st='color:#10b981;';
+        else if(line.includes('⚠️')||line.includes('🚨'))st='color:#ef4444;';
+        else if(line==='')return'<div style="height:6px;"></div>';
+        else if(line.includes('━'))st='color:#999;';
+        return`<div class="reasoning-line" style="${st}">${line}</div>`
+    }).join('');
+    d.innerHTML=`<div class="reasoning-title">${t}</div><div class="reasoning-content">${h}</div>`;
+    r.appendChild(d);
+    r.scrollTop=r.scrollHeight
+}
+
+function playNextStep(){
+    if(currentStep>=steps.length||!isPlaying||waitingForClick||waitingForUserInput){
+        if(currentStep>=steps.length){
+            isPlaying=false;
+            const b=document.getElementById('startBtn');
+            b.textContent='🔄 Restart Demo';
+            b.disabled=false
+        }
+        return
+    }
+    const s=steps[currentStep];
+    if(s.dayStamp)addDayStamp(s.dayStamp);
+    if(s.stage)document.getElementById('currentStage').textContent=s.stage;
+    if(s.profile)updateProfile(s.profile);
+    if(s.reasoning){
+        addReasoning(s.reasoning.title,s.reasoning.lines,s.reasoning.success,s.reasoning.alert);
+        if(s.requiresClick){
+            waitingForClick=true;
+            enableInputClick()
+        }else{
+            currentStep++;
+            setTimeout(playNextStep,500)
+        }
+        return
+    }
+    if(s.message){
+        if(s.isUserInput){
+            enableInput(s.userResponse)
+        }else{
+            addMessage(s.message.sender,s.message.text,s.timestamp);
+            if(s.requiresClick){
+                waitingForClick=true;
+                enableInputClick()
+            }else{
+                currentStep++;
+                setTimeout(playNextStep,500)
+            }
+        }
+        return
+    }
+    if(s.showTyping){
+        if(s.requiresClick){
+            waitingForClick=true;
+            enableInputClick()
+        }else{
+            showTypingIndicator();
+            currentStep++;
+            setTimeout(()=>{
+                removeTypingIndicator();
+                playNextStep()
+            },1500)
+        }
+        return
+    }
+    currentStep++;
+    setTimeout(playNextStep,500)
+}
+
+function startDemo(){
+    isPlaying=true;
+    currentStep=0;
+    waitingForClick=false;
+    waitingForUserInput=false;
+    currentClickHandler=null;
+    document.getElementById('messagesArea').innerHTML='';
+    document.getElementById('reasoningArea').innerHTML='';
+    document.getElementById('currentStage').textContent='Pre-Arrival';
+    const i=document.getElementById('textInput');
+    i.readOnly=true;
+    i.value='';
+    i.placeholder='';
+    i.classList.remove('waiting');
+    i.onclick=null;
+    const s=document.getElementById('sendBtn');
+    s.disabled=true;
+    updateProfile({totalLTV:0,actualWin:0,roiValue:0});
+    const b=document.getElementById('startBtn');
+    b.textContent='▶ Playing...';
+    b.disabled=true;
+    setTimeout(playNextStep,500)
+}
+
+window.onload = function(){ startDemo(); };
+
+function togglePlay(){
+    if(isPlaying){
+        isPlaying=false;
+        document.getElementById('startBtn').textContent='▶ Resume';
+    } else {
+        isPlaying=true;
+        document.getElementById('startBtn').textContent='⏸ Pause';
+        playNextStep();
+    }
+}
+
+</script>
+</body>
+</html>
